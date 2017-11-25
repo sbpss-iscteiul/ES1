@@ -8,7 +8,7 @@ import org.uma.jmetal.solution.DoubleSolution;
 
 public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
-	// TESTESSSDEEWCEFEWV
+	// TESTESSSDEEWCEFEWVe
 	  public AntiSpamFilterProblem() {
 	    // 10 variables (anti-spam filter rules) by default 
 	    this(10);

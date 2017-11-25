@@ -10,6 +10,22 @@ public class rule {
 		this.Peso=peso;
 	}
 	
+	
+	public double getPeso() {
+		return Peso;
+	}
+
+
+	public void setPeso(double peso) {
+		Peso = peso;
+	}
+
+
+	public String getName() {
+		return Name;
+	}
+
+
 	@Override
 	public String toString() {
 		String tostring= "Regra: "+this.Name+" ;Peso: "+this.Peso;

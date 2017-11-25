@@ -2,6 +2,7 @@ package txtreader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -19,12 +20,14 @@ public class leitor {
 	
 	public void ler_Regras() {
 		try {
-			Scanner sc = new Scanner(new File("rules.cf"));
+			Scanner sc = new Scanner(new File("C:\\Users\\Sergio-PC\\Desktop\\Universidade\\Engenharia de Software\\Projecto\\Inputs\\rules.cf"));
 			int contador=0;
 			String linha="";
+			double peso=0.0;
 			while(sc.hasNextLine()) {
 				linha=sc.nextLine();
-				regras.add(new rule(linha, 0.0));
+				peso=(10*Math.random())-5;
+				regras.add(new rule(linha, peso));
 			}
 			System.out.println(contador);
 			sc.close();
@@ -88,5 +91,45 @@ public class leitor {
 	
 	public ArrayList<rule> get_Regras(){
 		return regras;
+	}
+	
+	public void avaliar() {
+		email correio=null;
+		for (int i=0;i<5;i++) {
+			correio= emails.get(i);
+			avaliar_regras(correio);
+		}
+	}
+	
+	private void avaliar_regras(email mail) {
+		double contador=0.0;
+		//contem as regras do emails que recebe como input
+		ArrayList<String>rules=mail.getRegras();
+		//contem os nomes das regras a lista grande de regras
+		ArrayList<String> regrasNames = new ArrayList<>();
+		//coloca todos os nomes das regras dentro do array 'regrasNomes'
+		for(int i=0;i<regras.size();i++) {
+			regrasNames.add(regras.get(i).getName());
+		}
+		//vai ver se a nome da regra esta contido na lista de nomes de regras
+		for(int j=0;j<rules.size();j++) {
+			if(regrasNames.contains(rules.get(j)))
+				contador+=regras.get(j).getPeso();
+		}
+		System.out.println(contador+" "+mail.getTipo());
+		if(contador>=5.0) {
+			if(mail.getTipo().equals(type.SPAM))
+				System.out.println("Bem avaliado");
+			else
+				System.out.println("Falso Negativo");
+			System.out.println("este email é SPAM");
+		}else{
+			if(mail.getTipo().equals(type.HAM))
+				System.out.println("Bem avaliado");
+			else
+				System.out.println("Falso Positivo");
+			System.out.println("este email é HAM");
+		}
+			
 	}
 }

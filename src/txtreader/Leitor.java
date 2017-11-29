@@ -2,6 +2,8 @@ package txtreader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -16,21 +18,42 @@ public class Leitor {
 	}
 	
 	public void ler_Regras(String source) {
+		
 		try {
 			Scanner sc = new Scanner(new File(source));
-			int contador=0;
-			String linha="";
+			String ruleName="";
 			double peso=0.0;
-			while(sc.hasNextLine()) {
-				linha=sc.nextLine();
-				peso=(10*Math.random())-5;
-				regras.add(new Rule(linha, peso));
+			while(sc.hasNext()) {
+				ruleName=sc.next();
+				if(sc.hasNextDouble()){
+					peso=sc.nextDouble();
+				}
+				else{
+					peso=0.0;
+				}
+				Rule aux = new Rule(ruleName, peso);
+				regras.add(aux);
+				System.out.println(aux);
 			}
-			System.out.println(contador);
 			sc.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("Ficheiro não foi encontrado");
+			System.out.println("Ficheiro nï¿½o foi encontrado");
 		}
+	}
+	public void write_Rules(String source){
+		PrintWriter pw;
+		try {
+			pw = new PrintWriter(new FileOutputStream(new File(source)));
+			pw.flush();
+			for(Rule e : regras){
+				pw.println(e.getName() +" "+ e.getPeso());
+			}
+			pw.close();
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 	}
 	
 	public void ler_emails(String fonte) {
@@ -45,7 +68,7 @@ public class Leitor {
 			}
 			sc.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("Ficheiro não foi encontrado");
+			System.out.println("Ficheiro nï¿½o foi encontrado");
 		} catch (IllegalStateException e) {
 			System.out.println("Ficheiro que que selecionou nao estou correcto");
 			e.getStackTrace();
@@ -89,4 +112,5 @@ public class Leitor {
 	public ArrayList<Rule> get_Regras(){
 		return regras;
 	}
+
 }

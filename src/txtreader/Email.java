@@ -2,13 +2,14 @@ package txtreader;
 
 import java.util.ArrayList;
 
-public class email {
+
+public class Email {
 	
 	private String emailName;
 	private ArrayList<String> regras;
-	private type tipo;
+	private Type tipo;
 	
-	public email(String nomeEmail, type tipo) {
+	public Email(String nomeEmail, Type tipo) {
 		this.emailName=nomeEmail;
 		this.regras=new ArrayList<String>();
 		this.tipo=tipo;
@@ -26,11 +27,11 @@ public class email {
 		return regras;
 	}
 
-	public type getTipo() {
+	public Type getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(type tipo) {
+	public void setTipo(Type tipo) {
 		this.tipo = tipo;
 	}
 	

@@ -5,26 +5,26 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import txtreader.rule;
-
-public class leitor {
+public class Leitor {
 	
-	private ArrayList<rule>regras;
-	private ArrayList<email>emails;
+	private ArrayList<Rule>regras;
+	private ArrayList<Email>emails;
 	
-	public leitor() {
-		regras=new ArrayList<rule>();
-		emails=new ArrayList<email>();
+	public Leitor() {
+		regras=new ArrayList<Rule>();
+		emails=new ArrayList<Email>();
 	}
 	
 	public void ler_Regras() {
 		try {
-			Scanner sc = new Scanner(new File("rules.cf"));
+			Scanner sc = new Scanner(new File("C:\\Users\\Sergio-PC\\Desktop\\Universidade\\Engenharia de Software\\Projecto\\Inputs\\rules.cf"));
 			int contador=0;
 			String linha="";
+			double peso=0.0;
 			while(sc.hasNextLine()) {
 				linha=sc.nextLine();
-				regras.add(new rule(linha, 0.0));
+				peso=(10*Math.random())-5;
+				regras.add(new Rule(linha, peso));
 			}
 			System.out.println(contador);
 			sc.close();
@@ -36,7 +36,7 @@ public class leitor {
 	public void ler_emails(String fonte) {
 		try {
 			String source=fonte;
-			type tipo = type_definition(source);
+			Type tipo = type_definition(source);
 			String linha="";
 			Scanner sc = new Scanner(new File(source));
 			while(sc.hasNextLine()) {
@@ -62,31 +62,71 @@ public class leitor {
 		}
 	}
 	
-	private type type_definition(String source) {
-		type tipo = null;
+	private Type type_definition(String source) {
+		Type tipo = null;
 		if(source.contains("ham"))
-			tipo=type.HAM;
+			tipo=Type.HAM;
 		else if(source.contains("spam"))
-			tipo=type.SPAM;
+			tipo=Type.SPAM;
 		else
 			tipo=null;
 		return tipo;
 	}
 	
-	private void tratar_email(String linha, type tipo) {
+	private void tratar_email(String linha, Type tipo) {
 		String []tmpVector = linha.split("	");
-		email tmpEmail = new email(tmpVector[0], tipo);
+		Email tmpEmail = new Email(tmpVector[0], tipo);
 		for(int i=1;i<tmpVector.length;i++) {
 			tmpEmail.adicionar_Regras(tmpVector[i]);
 		}
 		emails.add(tmpEmail);
 	}
 
-	public ArrayList<email> get_Emails() {
+	public ArrayList<Email> get_Emails() {
 		return emails;
 	}
 	
-	public ArrayList<rule> get_Regras(){
+	public ArrayList<Rule> get_Regras(){
 		return regras;
+	}
+	
+	public void avaliar() {
+		Email correio=null;
+		for (int i=0;i<5;i++) {
+			correio= emails.get(i);
+			avaliar_regras(correio);
+		}
+	}
+	
+	private void avaliar_regras(Email mail) {
+		double contador=0.0;
+		//contem as regras do emails que recebe como input
+		ArrayList<String>rules=mail.getRegras();
+		//contem os nomes das regras a lista grande de regras
+		ArrayList<String> regrasNames = new ArrayList<>();
+		//coloca todos os nomes das regras dentro do array 'regrasNomes'
+		for(int i=0;i<regras.size();i++) {
+			regrasNames.add(regras.get(i).getName());
+		}
+		//vai ver se a nome da regra esta contido na lista de nomes de regras
+		for(int j=0;j<rules.size();j++) {
+			if(regrasNames.contains(rules.get(j)))
+				contador+=regras.get(j).getPeso();
+		}
+		System.out.println(contador+" "+mail.getTipo());
+		if(contador>=5.0) {
+			if(mail.getTipo().equals(Type.SPAM))
+				System.out.println("Bem avaliado");
+			else
+				System.out.println("Falso Negativo");
+			System.out.println("Este email é spam");
+		}else{
+			if(mail.getTipo().equals(Type.HAM))
+				System.out.println("Bem avaliado");
+			else
+				System.out.println("Falso Positivo");
+			System.out.println("Este email é spam");
+		}
+			
 	}
 }

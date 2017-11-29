@@ -11,11 +11,11 @@ import txtreader.rule;
 public class leitor {
 	
 	private ArrayList<rule>regras;
-	private ArrayList<email>emails;
+	private ArrayList<Email>emails;
 	
 	public leitor() {
 		regras=new ArrayList<rule>();
-		emails=new ArrayList<email>();
+		emails=new ArrayList<Email>();
 	}
 	
 	public void ler_Regras() {
@@ -78,14 +78,14 @@ public class leitor {
 	
 	private void tratar_email(String linha, type tipo) {
 		String []tmpVector = linha.split("	");
-		email tmpEmail = new email(tmpVector[0], tipo);
+		Email tmpEmail = new Email(tmpVector[0], tipo);
 		for(int i=1;i<tmpVector.length;i++) {
 			tmpEmail.adicionar_Regras(tmpVector[i]);
 		}
 		emails.add(tmpEmail);
 	}
 
-	public ArrayList<email> get_Emails() {
+	public ArrayList<Email> get_Emails() {
 		return emails;
 	}
 	
@@ -94,14 +94,14 @@ public class leitor {
 	}
 	
 	public void avaliar() {
-		email correio=null;
+		Email correio=null;
 		for (int i=0;i<5;i++) {
 			correio= emails.get(i);
 			avaliar_regras(correio);
 		}
 	}
 	
-	private void avaliar_regras(email mail) {
+	private void avaliar_regras(Email mail) {
 		double contador=0.0;
 		//contem as regras do emails que recebe como input
 		ArrayList<String>rules=mail.getRegras();
@@ -122,13 +122,13 @@ public class leitor {
 				System.out.println("Bem avaliado");
 			else
 				System.out.println("Falso Negativo");
-			System.out.println("este email é SPAM");
+			System.out.println("Este email é spam");
 		}else{
 			if(mail.getTipo().equals(type.HAM))
 				System.out.println("Bem avaliado");
 			else
 				System.out.println("Falso Positivo");
-			System.out.println("este email é HAM");
+			System.out.println("Este email é spam");
 		}
 			
 	}

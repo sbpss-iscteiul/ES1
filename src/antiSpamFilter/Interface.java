@@ -31,12 +31,12 @@ import javax.swing.table.TableModel;
 
 import txtreader.Rule;
 import txtreader.Writer;
-import txtreader.leitor;
+import txtreader.Leitor;
 
 public class Interface{
 	
 	private JFrame frame;
-	private leitor leitor;
+	private Leitor leitor;
 	private TableModel ruleModel;
 	private JTable ruleTable;
 	private Box container;
@@ -44,7 +44,7 @@ public class Interface{
 	
 	public Interface(){
 		container = new Box(2);
-		leitor = new leitor();
+		leitor = new Leitor();
 		leitor.ler_Regras();
 		addFrameContent();
 	}

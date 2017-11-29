@@ -7,14 +7,14 @@ import java.util.Scanner;
 
 import txtreader.Rule;
 
-public class leitor {
+public class Leitor {
 	
 	private ArrayList<Rule>regras;
-	private ArrayList<email>emails;
+	private ArrayList<Email>emails;
 	
-	public leitor() {
+	public Leitor() {
 		regras=new ArrayList<Rule>();
-		emails=new ArrayList<email>();
+		emails=new ArrayList<Email>();
 	}
 	
 	public void ler_Regras() {
@@ -35,7 +35,7 @@ public class leitor {
 	public void ler_emails(String fonte) {
 		try {
 			String source=fonte;
-			type tipo = type_definition(source);
+			Type tipo = type_definition(source);
 			String linha="";
 			Scanner sc = new Scanner(new File(source));
 			while(sc.hasNextLine()) {
@@ -61,27 +61,27 @@ public class leitor {
 		}
 	}
 	
-	private type type_definition(String source) {
-		type tipo = null;
+	private Type type_definition(String source) {
+		Type tipo = null;
 		if(source.contains("ham"))
-			tipo=type.HAM;
+			tipo=Type.HAM;
 		else if(source.contains("spam"))
-			tipo=type.SPAM;
+			tipo=Type.SPAM;
 		else
 			tipo=null;
 		return tipo;
 	}
 	
-	private void tratar_email(String linha, type tipo) {
+	private void tratar_email(String linha, Type tipo) {
 		String []tmpVector = linha.split("	");
-		email tmpEmail = new email(tmpVector[0], tipo);
+		Email tmpEmail = new Email(tmpVector[0], tipo);
 		for(int i=1;i<tmpVector.length;i++) {
 			tmpEmail.adicionar_Regras(tmpVector[i]);
 		}
 		emails.add(tmpEmail);
 	}
 
-	public ArrayList<email> get_Emails() {
+	public ArrayList<Email> get_Emails() {
 		return emails;
 	}
 	

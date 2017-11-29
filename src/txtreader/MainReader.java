@@ -1,8 +1,8 @@
 package txtreader;
 
-public class Main {
+public class MainReader {
 	public static void main(String[] args) {
-		leitor vailer =new leitor();
+		Leitor vailer =new Leitor();
 		vailer.ler_Regras();
 		vailer.ler_emails("ham.log");
 		vailer.ler_emails("spam.log");

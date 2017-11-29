@@ -20,7 +20,7 @@ public class Rule {
 	
 	@Override
 	public String toString() {
-		String tostring= "Regra: "+this.Name+" ;Peso: "+this.Peso;
+		String tostring=this.Name+"		"+this.Peso;
 		return tostring;
 	}
 }

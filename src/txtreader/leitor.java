@@ -19,14 +19,13 @@ public class leitor {
 	
 	public void ler_Regras() {
 		try {
-			Scanner sc = new Scanner(new File("src/Documents/rules.cf"));
+			Scanner sc = new Scanner(new File("src/Documents/rulesTest.cf"));
 			int contador=0;
 			String linha="";
 			while(sc.hasNextLine()) {
 				linha=sc.nextLine();
 				regras.add(new Rule(linha, 0.0));
 			}
-//			System.out.println(contador);
 			sc.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("Ficheiro não foi encontrado");

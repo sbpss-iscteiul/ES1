@@ -19,7 +19,7 @@ public class leitor {
 	
 	public void ler_Regras() {
 		try {
-			Scanner sc = new Scanner(new File("src/Documents/rulesTest.cf"));
+			Scanner sc = new Scanner(new File("src/Documents/rules.cf"));
 			int contador=0;
 			String linha="";
 			while(sc.hasNextLine()) {

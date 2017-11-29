@@ -2,19 +2,18 @@ package txtreader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import txtreader.rule;
+import txtreader.Rule;
 
-public class leitor {
+public class Leitor {
 	
-	private ArrayList<rule>regras;
+	private ArrayList<Rule>regras;
 	private ArrayList<Email>emails;
 	
-	public leitor() {
-		regras=new ArrayList<rule>();
+	public Leitor() {
+		regras=new ArrayList<Rule>();
 		emails=new ArrayList<Email>();
 	}
 	
@@ -27,7 +26,7 @@ public class leitor {
 			while(sc.hasNextLine()) {
 				linha=sc.nextLine();
 				peso=(10*Math.random())-5;
-				regras.add(new rule(linha, peso));
+				regras.add(new Rule(linha, peso));
 			}
 			System.out.println(contador);
 			sc.close();
@@ -39,7 +38,7 @@ public class leitor {
 	public void ler_emails(String fonte) {
 		try {
 			String source=fonte;
-			type tipo = type_definition(source);
+			Type tipo = type_definition(source);
 			String linha="";
 			Scanner sc = new Scanner(new File(source));
 			while(sc.hasNextLine()) {
@@ -65,18 +64,18 @@ public class leitor {
 		}
 	}
 	
-	private type type_definition(String source) {
-		type tipo = null;
+	private Type type_definition(String source) {
+		Type tipo = null;
 		if(source.contains("ham"))
-			tipo=type.HAM;
+			tipo=Type.HAM;
 		else if(source.contains("spam"))
-			tipo=type.SPAM;
+			tipo=Type.SPAM;
 		else
 			tipo=null;
 		return tipo;
 	}
 	
-	private void tratar_email(String linha, type tipo) {
+	private void tratar_email(String linha, Type tipo) {
 		String []tmpVector = linha.split("	");
 		Email tmpEmail = new Email(tmpVector[0], tipo);
 		for(int i=1;i<tmpVector.length;i++) {
@@ -89,7 +88,7 @@ public class leitor {
 		return emails;
 	}
 	
-	public ArrayList<rule> get_Regras(){
+	public ArrayList<Rule> get_Regras(){
 		return regras;
 	}
 	
@@ -118,13 +117,13 @@ public class leitor {
 		}
 		System.out.println(contador+" "+mail.getTipo());
 		if(contador>=5.0) {
-			if(mail.getTipo().equals(type.SPAM))
+			if(mail.getTipo().equals(Type.SPAM))
 				System.out.println("Bem avaliado");
 			else
 				System.out.println("Falso Negativo");
 			System.out.println("Este email é spam");
 		}else{
-			if(mail.getTipo().equals(type.HAM))
+			if(mail.getTipo().equals(Type.HAM))
 				System.out.println("Bem avaliado");
 			else
 				System.out.println("Falso Positivo");

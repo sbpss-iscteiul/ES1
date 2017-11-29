@@ -1,11 +1,11 @@
 package txtreader;
 
-public class rule {
+public class Rule {
 	
 	private String Name;
 	private double Peso;
 	
-	public rule(String name, double peso){
+	public Rule(String name, double peso){
 		this.Name=name;
 		this.Peso=peso;
 	}

@@ -1,5 +1,5 @@
 package txtreader;
 
-public enum type {
+public enum Type {
 	SPAM , HAM
 }

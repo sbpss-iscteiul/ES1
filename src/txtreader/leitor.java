@@ -5,28 +5,28 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import txtreader.rule;
+import txtreader.Rule;
 
 public class leitor {
 	
-	private ArrayList<rule>regras;
+	private ArrayList<Rule>regras;
 	private ArrayList<email>emails;
 	
 	public leitor() {
-		regras=new ArrayList<rule>();
+		regras=new ArrayList<Rule>();
 		emails=new ArrayList<email>();
 	}
 	
 	public void ler_Regras() {
 		try {
-			Scanner sc = new Scanner(new File("rules.cf"));
+			Scanner sc = new Scanner(new File("src/Documents/rules.cf"));
 			int contador=0;
 			String linha="";
 			while(sc.hasNextLine()) {
 				linha=sc.nextLine();
-				regras.add(new rule(linha, 0.0));
+				regras.add(new Rule(linha, 0.0));
 			}
-			System.out.println(contador);
+//			System.out.println(contador);
 			sc.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("Ficheiro não foi encontrado");
@@ -86,7 +86,7 @@ public class leitor {
 		return emails;
 	}
 	
-	public ArrayList<rule> get_Regras(){
+	public ArrayList<Rule> get_Regras(){
 		return regras;
 	}
 }

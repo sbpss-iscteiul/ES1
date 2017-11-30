@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import txtreader.Rule;
+
 public class Leitor {
 	
 	private ArrayList<Rule>regras;
@@ -20,13 +22,10 @@ public class Leitor {
 			Scanner sc = new Scanner(new File(source));
 			int contador=0;
 			String linha="";
-			double peso=0.0;
 			while(sc.hasNextLine()) {
 				linha=sc.nextLine();
-				peso=(10*Math.random())-5;
-				regras.add(new Rule(linha, peso));
+				regras.add(new Rule(linha, 0.0));
 			}
-			System.out.println(contador);
 			sc.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("Ficheiro não foi encontrado");

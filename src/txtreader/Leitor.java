@@ -17,6 +17,7 @@ public class Leitor {
 		emails=new ArrayList<Email>();
 	}
 	
+
 	public void ler_Regras(String source) {
 		try {
 			Scanner sc = new Scanner(new File(source));

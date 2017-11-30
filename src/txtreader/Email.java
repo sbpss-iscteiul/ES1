@@ -2,7 +2,6 @@ package txtreader;
 
 import java.util.ArrayList;
 
-
 public class Email {
 	
 	private String emailName;

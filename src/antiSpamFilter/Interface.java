@@ -7,8 +7,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -22,7 +20,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
@@ -33,7 +30,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import txtreader.Rule;
-//import txtreader.Writer;
+import txtreader.Writer;
 import txtreader.Leitor;
 
 public class Interface{
@@ -43,7 +40,8 @@ public class Interface{
 	private TableModel ruleModel;
 	private JTable ruleTable;
 	private Box container;
-//	private Writer fileWriter;
+
+	private Writer fileWriter;
 	
 	public Interface(){
 		container = new Box(2);
@@ -87,12 +85,14 @@ public class Interface{
 			}
 		});
 		JScrollPane ruleScroll = new JScrollPane(ruleTable);
-		//fileWriter = new Writer(ruleList);
+
+		fileWriter = new Writer(ruleList);
 		JButton testButton = new JButton("test buttton");
 		testButton.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//fileWriter.writeFile();
+				fileWriter.write();
+
 			}
 		});
 		

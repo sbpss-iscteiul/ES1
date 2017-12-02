@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Scanner;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -39,7 +38,7 @@ public class Interface{
 	private TableModel ruleModel;
 	private JTable ruleTable;
 	private Box container;
-	//cenas para controlo de configurações
+	//cenas para controlo de configuraï¿½ï¿½es
 	private boolean rulesStatus;
 	private boolean hamStatus;
 	private boolean spamStatus;
@@ -98,11 +97,7 @@ public class Interface{
 		
 		//lista de regras
 		ArrayList<Rule> ruleList = leitor.get_Regras();
-		
-		/*
-		//WHY IS THIS HERE
-		Scanner ruleScanner;
-		*/
+
 		String[] columnNames = {"Rule", "Weight"};
 		
 		Object[][] data = new Object[ruleList.size()][2];
@@ -128,15 +123,18 @@ public class Interface{
 		
 
 		fileWriter = new Writer(ruleList);
-		JButton testButton = new JButton("test buttton");
+		JButton testButton = new JButton("Load Rules");
 		testButton.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(rulesStatus)
 					fileWriter.write();
-				else
+				else {
 					//Teste by sergio
 					JOptionPane.showMessageDialog(frame, "nao ha um ficheiro regras selecionado");
+				}
+				leitor.ler_Regras("");
+
 
 			}
 		});
@@ -153,32 +151,40 @@ public class Interface{
 		JTextField text2= new JTextField(25);
 		JTextField text3= new JTextField(25);
 		
-		//criar primeiro painel de selecção
+
+		//criar primeiro painel de selecï¿½ï¿½o
 		//Teste by sergio
-		JLabel label1= new JLabel("Rules.cf:");
+
+		JLabel label1= new JLabel("Rules");
+
 		JPanel panelN1= new JPanel();
 		panelN1.setBorder(border);
 		northPanel.add(panelN1);
 		panelN1.add(label1);
 		panelN1.add(text1);
 		
-		//criar segundo painel de selecção
-		JLabel label2= new JLabel("label2:");
+
+		//criar segundo painel de selecï¿½ï¿½o
+
+		JLabel label2= new JLabel("Spam");
+
 		JPanel panelN2= new JPanel();
 		panelN2.setBorder(border);
 		northPanel.add(panelN2);
 		panelN2.add(label2);
 		panelN2.add(text2);
 		
-		//criar terceiro painel de selecção
-		JLabel label3= new JLabel("label3:");
+		//criar terceiro painel de selecï¿½ï¿½o
+
+		JLabel label3= new JLabel("Ham");
+
 		JPanel panelN3= new JPanel();
 		panelN3.setBorder(border);
 		northPanel.add(panelN3);
 		panelN3.add(label3);
 		panelN3.add(text3);
 		
-		//criar os butoes para cada painel de selecção
+		//criar os butoes para cada painel de selecï¿½ï¿½o
 		JButton button1 = new JButton(new Action() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -325,7 +331,7 @@ public class Interface{
 		button2.setText("Browse");
 		button3.setText("Browse");
 		
-		//Adicionar os botoes aos paineis de selecção
+		//Adicionar os botoes aos paineis de selecï¿½ï¿½o
 		panelN1.add(button1);
 		panelN2.add(button2);
 		panelN3.add(button3);
@@ -339,7 +345,7 @@ public class Interface{
 		rightPanel.setBorder(border);
 		rightPanel.add(testButton);
 		
-		//adicionar paineis esquerdo e direito ao painel central, e o central à frame
+		//adicionar paineis esquerdo e direito ao painel central, e o central ï¿½ frame
 		centerPanel.add(leftPanel);
 		centerPanel.add(rightPanel);
 		frame.add(centerPanel);

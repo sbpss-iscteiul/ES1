@@ -47,6 +47,9 @@ public class Interface{
 	private JPanel centerPanel;
 	private JPanel leftPanel;
 	private JPanel rightPanel;
+	private JTextField text1;
+	private JTextField text2;
+	private JTextField text3;
 	
 	
 	public Interface(){
@@ -75,6 +78,9 @@ public class Interface{
 		leitor = new Leitor();
 		leitor.ler_Regras("C:\\Users\\Sergio-PC\\Desktop\\Universidade\\Engenharia de Software\\Projecto\\Inputs\\rules.cf");
 		addFrameContent();
+		text1= new JTextField(25);
+		text2= new JTextField(25);
+		text3= new JTextField(25);
 		
 	}
 	
@@ -84,14 +90,7 @@ public class Interface{
 	}
 	
 	public void addFrameContent (){
-		/*
-		//criar frame
-		frame = new JFrame();
-		frame.setResizable(true);
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setLayout(new BorderLayout());
-		*/
+
 		Border border = BorderFactory.createLineBorder(Color.black, 1);
 		container.setAlignmentX(Box.LEFT_ALIGNMENT);
 		
@@ -127,13 +126,15 @@ public class Interface{
 		testButton.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				if(rulesStatus)
 					fileWriter.write();
 				else {
 					//Teste by sergio
 					JOptionPane.showMessageDialog(frame, "nao ha um ficheiro regras selecionado");
 				}
-				leitor.ler_Regras("");
+				leitor.ler_Regras(text1.getText());
+
 
 
 			}
@@ -145,15 +146,6 @@ public class Interface{
 		northPanel.setLayout(new FlowLayout());
 		northPanel.setBorder(border);
 		frame.add(northPanel, BorderLayout.NORTH);
-		
-		//campos de texto 
-		JTextField text1= new JTextField(25);
-		JTextField text2= new JTextField(25);
-		JTextField text3= new JTextField(25);
-		
-
-		//criar primeiro painel de selec��o
-		//Teste by sergio
 
 		JLabel label1= new JLabel("Rules");
 

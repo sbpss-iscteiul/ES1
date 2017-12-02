@@ -77,11 +77,11 @@ public class Interface{
 		spamStatus=false;
 		leitor = new Leitor();
 		leitor.ler_Regras("C:\\Users\\Sergio-PC\\Desktop\\Universidade\\Engenharia de Software\\Projecto\\Inputs\\rules.cf");
-		addFrameContent();
+
 		text1= new JTextField(25);
 		text2= new JTextField(25);
 		text3= new JTextField(25);
-		
+		addFrameContent();
 	}
 	
 	public void open(){
@@ -99,34 +99,33 @@ public class Interface{
 
 		String[] columnNames = {"Rule", "Weight"};
 		
-		Object[][] data = new Object[ruleList.size()][2];
-			for(int i=0; i<ruleList.size(); i++){
-				data[i][0] = ruleList.get(i).getName();
-				data[i][1] = ruleList.get(i).getPeso();
-			}
-
-		ruleModel = new DefaultTableModel(data, columnNames);
-		ruleTable = new JTable(ruleModel);
-		ruleTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		ruleModel.addTableModelListener(new TableModelListener() {
-			@Override
-			public void tableChanged(TableModelEvent e) {
-				//possivelmente utilizar o event e
-				for(int i=0; i<ruleModel.getRowCount(); i++){
-					Rule tmpRule = new Rule(String.valueOf(ruleModel.getValueAt(i, 0)), Double.valueOf(String.valueOf(ruleModel.getValueAt(i, 1))));
-					ruleList.set(i, tmpRule);
-				}
-			}
-		});
-		JScrollPane ruleScroll = new JScrollPane(ruleTable);
 		
-
 		fileWriter = new Writer(ruleList);
 		JButton testButton = new JButton("Load Rules");
 		testButton.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				leitor.ler_Regras(text1.getText());
+				Object[][] data = new Object[ruleList.size()][2];
+				for(int i=0; i<ruleList.size(); i++){
+					data[i][0] = ruleList.get(i).getName();
+					data[i][1] = ruleList.get(i).getPeso();
+				}
+				ruleModel = new DefaultTableModel(data, columnNames);
+				ruleTable = new JTable(ruleModel);
+				ruleTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+				ruleModel.addTableModelListener(new TableModelListener() {
+				@Override
+					public void tableChanged(TableModelEvent e) {
+						//possivelmente utilizar o event e
+						for(int i=0; i<ruleModel.getRowCount(); i++){
+							Rule tmpRule = new Rule(String.valueOf(ruleModel.getValueAt(i, 0)), Double.valueOf(String.valueOf(ruleModel.getValueAt(i, 1))));
+							ruleList.set(i, tmpRule);
+						}
+					}
+				});
+				JScrollPane ruleScroll = new JScrollPane(ruleTable);
+				leftPanel.add(ruleScroll);
 				if(rulesStatus)
 					fileWriter.write();
 				else {
@@ -185,7 +184,9 @@ public class Interface{
 				if(fc.getSelectedFile().toString().contains("rules.cf")) {
 					text1.setText(fc.getSelectedFile().toString());
 					rulesStatus=true;
-				}else {
+					
+				}
+				else {
 					JOptionPane.showMessageDialog(frame, "Path selecionado nao contem rules.cf");
 				}
 					
@@ -329,7 +330,7 @@ public class Interface{
 		panelN3.add(button3);
 		
 		//Criar painel esquerda (Lista de Regras)
-		leftPanel.add(ruleScroll);
+//		leftPanel.add(ruleScroll);
 		leftPanel.setBorder(border);
 		
 		//Criar painel da direita

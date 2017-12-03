@@ -78,7 +78,7 @@ public class Interface{
 		hamStatus=false;
 		spamStatus=false;
 		leitor = new Leitor();
-		leitor.ler_Regras("/Users/mohammadmudassir/Desktop/PI_ficheiros/rules.cf");
+//		leitor.ler_Regras("/Users/mohammadmudassir/Desktop/PI_ficheiros/rules.cf");
 
 		text1= new JTextField(25);
 		text2= new JTextField(25);
@@ -90,7 +90,19 @@ public class Interface{
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setVisible(true);
 	}
-	
+	public Object[][] tableUpdater(){
+		lastRule = 0;
+		Leitor leitor= new Leitor();
+		leitor.ler_Regras(text1.getText());
+		ArrayList<Rule> ruleList = leitor.get_Regras();
+		Object[][] data = new Object[500][2];
+		while(lastRule<ruleList.size()){
+			data[lastRule][0] = ruleList.get(lastRule).getName();
+			data[lastRule][1] = ruleList.get(lastRule).getPeso();
+			lastRule++;
+		}
+		return data;
+	}
 	public void addFrameContent (){
 
 		Border border = BorderFactory.createLineBorder(Color.black, 1);
@@ -107,32 +119,38 @@ public class Interface{
 				data[lastRule][1] = ruleList.get(lastRule).getPeso();
 				lastRule++;
 			}
+			
 
 		ruleModel = new DefaultTableModel(data, columnNames);
 		ruleTable = new JTable(ruleModel);
 		ruleTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		ruleModel.addTableModelListener(new TableModelListener() {
-			@Override
-			public void tableChanged(TableModelEvent e) {
-				//possivelmente utilizar o event e
-				for(int i=0; i<ruleModel.getRowCount(); i++){
-					Rule tmpRule = new Rule(String.valueOf(ruleModel.getValueAt(i, 0)), Double.valueOf(String.valueOf(ruleModel.getValueAt(i, 1))));
-					ruleList.set(i, tmpRule);
-				}
-			}
-		});
+//		ruleModel.addTableModelListener(new TableModelListener() {
+//			@Override
+//			public void tableChanged(TableModelEvent e) {
+//				
+//				System.out.println("uiii");
+//				//possivelmente utilizar o event e
+//				for(int i=0; i<ruleModel.getRowCount(); i++){
+//					Rule tmpRule = new Rule(String.valueOf(ruleModel.getValueAt(i, 0)), Double.valueOf(String.valueOf(ruleModel.getValueAt(i, 1))));
+//					ruleList.set(i, tmpRule);
+//				}
+//			}
+//		});
 		JScrollPane ruleScroll = new JScrollPane(ruleTable);
 		
 
 		fileWriter = new Writer(ruleList);
+		
 		JButton testButton = new JButton("Load Rules");
 		testButton.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
+				ruleModel = new DefaultTableModel(tableUpdater(), columnNames);
+				ruleTable.setModel(ruleModel);
+				ruleTable.revalidate();
+				ruleScroll.repaint();
 				
-				data[lastRule][0]="dinadnei";
-				((DefaultTableModel)ruleModel).addRow(data[lastRule]);
-				frame.repaint();
 				
 //				if(rulesStatus)
 //					fileWriter.write();

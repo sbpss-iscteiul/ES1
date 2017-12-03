@@ -50,6 +50,7 @@ public class Interface{
 	private JTextField text1;
 	private JTextField text2;
 	private JTextField text3;
+	private int lastRule;
 	
 	
 	public Interface(){
@@ -60,6 +61,7 @@ public class Interface{
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setLayout(new BorderLayout());
+		lastRule=0;
 		//----------------------------
 		//inicializar e adicionar paineis
 		//center
@@ -76,7 +78,7 @@ public class Interface{
 		hamStatus=false;
 		spamStatus=false;
 		leitor = new Leitor();
-		leitor.ler_Regras("C:\\Users\\Sergio-PC\\Desktop\\Universidade\\Engenharia de Software\\Projecto\\Inputs\\rules.cf");
+		leitor.ler_Regras("/Users/mohammadmudassir/Desktop/PI_ficheiros/rules.cf");
 
 		text1= new JTextField(25);
 		text2= new JTextField(25);
@@ -99,40 +101,46 @@ public class Interface{
 
 		String[] columnNames = {"Rule", "Weight"};
 		
+		Object[][] data = new Object[500][2];
+			while(lastRule<ruleList.size()){
+				data[lastRule][0] = ruleList.get(lastRule).getName();
+				data[lastRule][1] = ruleList.get(lastRule).getPeso();
+				lastRule++;
+			}
+
+		ruleModel = new DefaultTableModel(data, columnNames);
+		ruleTable = new JTable(ruleModel);
+		ruleTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		ruleModel.addTableModelListener(new TableModelListener() {
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				//possivelmente utilizar o event e
+				for(int i=0; i<ruleModel.getRowCount(); i++){
+					Rule tmpRule = new Rule(String.valueOf(ruleModel.getValueAt(i, 0)), Double.valueOf(String.valueOf(ruleModel.getValueAt(i, 1))));
+					ruleList.set(i, tmpRule);
+				}
+			}
+		});
+		JScrollPane ruleScroll = new JScrollPane(ruleTable);
 		
+
 		fileWriter = new Writer(ruleList);
 		JButton testButton = new JButton("Load Rules");
 		testButton.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				leitor.ler_Regras(text1.getText());
-				Object[][] data = new Object[ruleList.size()][2];
-				for(int i=0; i<ruleList.size(); i++){
-					data[i][0] = ruleList.get(i).getName();
-					data[i][1] = ruleList.get(i).getPeso();
-				}
-				ruleModel = new DefaultTableModel(data, columnNames);
-				ruleTable = new JTable(ruleModel);
-				ruleTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-				ruleModel.addTableModelListener(new TableModelListener() {
-				@Override
-					public void tableChanged(TableModelEvent e) {
-						//possivelmente utilizar o event e
-						for(int i=0; i<ruleModel.getRowCount(); i++){
-							Rule tmpRule = new Rule(String.valueOf(ruleModel.getValueAt(i, 0)), Double.valueOf(String.valueOf(ruleModel.getValueAt(i, 1))));
-							ruleList.set(i, tmpRule);
-						}
-					}
-				});
-				JScrollPane ruleScroll = new JScrollPane(ruleTable);
-				leftPanel.add(ruleScroll);
-				if(rulesStatus)
-					fileWriter.write();
-				else {
-					//Teste by sergio
-					JOptionPane.showMessageDialog(frame, "nao ha um ficheiro regras selecionado");
-				}
-				leitor.ler_Regras(text1.getText());
+				
+				data[lastRule][0]="dinadnei";
+				((DefaultTableModel)ruleModel).addRow(data[lastRule]);
+				frame.repaint();
+				
+//				if(rulesStatus)
+//					fileWriter.write();
+//				else {
+//					//Teste by sergio
+//					JOptionPane.showMessageDialog(frame, "nao ha um ficheiro regras selecionado");
+//				}
+//				leitor.ler_Regras(text1.getText());
 
 
 
@@ -184,9 +192,8 @@ public class Interface{
 				if(fc.getSelectedFile().toString().contains("rules.cf")) {
 					text1.setText(fc.getSelectedFile().toString());
 					rulesStatus=true;
-					
-				}
-				else {
+					leitor.ler_Regras(text1.getText());
+				}else {
 					JOptionPane.showMessageDialog(frame, "Path selecionado nao contem rules.cf");
 				}
 					
@@ -330,7 +337,7 @@ public class Interface{
 		panelN3.add(button3);
 		
 		//Criar painel esquerda (Lista de Regras)
-//		leftPanel.add(ruleScroll);
+		leftPanel.add(ruleScroll);
 		leftPanel.setBorder(border);
 		
 		//Criar painel da direita

@@ -21,7 +21,7 @@ public class Leitor {
 	
 
 	public void ler_Regras(String source) {
-		
+
 		try {
 
 			Scanner sc = new Scanner(new File(source));
@@ -37,7 +37,6 @@ public class Leitor {
 				}
 				Rule aux = new Rule(ruleName, peso);
 				regras.add(aux);
-				System.out.println(aux);
 			}
 			sc.close();
 		} catch (FileNotFoundException e) {

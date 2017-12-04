@@ -92,7 +92,6 @@ public class Interface{
 	}
 	public Object[][] tableUpdater(){
 		lastRule = 0;
-		Leitor leitor= new Leitor();
 		leitor.ler_Regras(text1.getText());
 		ArrayList<Rule> ruleList = leitor.get_Regras();
 		Object[][] data = new Object[500][2];
@@ -107,10 +106,8 @@ public class Interface{
 
 		Border border = BorderFactory.createLineBorder(Color.black, 1);
 		container.setAlignmentX(Box.LEFT_ALIGNMENT);
-		
 		//lista de regras
 		ArrayList<Rule> ruleList = leitor.get_Regras();
-
 		String[] columnNames = {"Rule", "Weight"};
 		
 		Object[][] data = new Object[500][2];
@@ -119,8 +116,6 @@ public class Interface{
 				data[lastRule][1] = ruleList.get(lastRule).getPeso();
 				lastRule++;
 			}
-			
-
 		ruleModel = new DefaultTableModel(data, columnNames);
 		ruleTable = new JTable(ruleModel);
 		ruleTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
@@ -139,19 +134,26 @@ public class Interface{
 		JScrollPane ruleScroll = new JScrollPane(ruleTable);
 		
 
-		fileWriter = new Writer(ruleList);
+//		fileWriter = new Writer(ruleList);
 		
 		JButton testButton = new JButton("Load Rules");
 		testButton.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				ruleModel = new DefaultTableModel(tableUpdater(), columnNames);
-				ruleTable.setModel(ruleModel);
-				ruleTable.revalidate();
-				ruleScroll.repaint();
+				//adicionado if para que so seja feito o carregamento quando houver um path para este
+				//caso contrário é feito o prompt de uma mensagem de erro 
+				if(rulesStatus) {
+					ruleModel = new DefaultTableModel(tableUpdater(), columnNames);
+					ruleTable.setModel(ruleModel);
+					ruleTable.revalidate();
+					ruleScroll.repaint();
+				}else {
+					JOptionPane.showMessageDialog(frame, "nao ha um ficheiro regras selecionado");
+				}
 				
 				
+				
+				//Duarte- guardar contudo da tabela num segundo ficheiro.
 //				if(rulesStatus)
 //					fileWriter.write();
 //				else {
@@ -201,28 +203,24 @@ public class Interface{
 		panelN3.add(label3);
 		panelN3.add(text3);
 		
-		//criar os butoes para cada painel de selecï¿½ï¿½o
+		//criar os botoes para cada painel de selecionado
 		JButton button1 = new JButton(new Action() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fc.showOpenDialog(text1);
-				//Teste by sergio
-				if(fc.getSelectedFile().toString().contains("rules.cf")) {
+				//verifica se path contem o nome do ficehiro que se quer
+				if(fc.getSelectedFile().toString().toLowerCase().contains("rules.cf")) {
 					text1.setText(fc.getSelectedFile().toString());
 					rulesStatus=true;
-					leitor.ler_Regras(text1.getText());
 				}else {
 					JOptionPane.showMessageDialog(frame, "Path selecionado nao contem rules.cf");
 				}
-					
 			}
-			
 			@Override
 			public void setEnabled(boolean b) {
 				// TODO Auto-generated method stub
 				
 			}
-			
 			@Override
 			public void removePropertyChangeListener(PropertyChangeListener listener) {
 				// TODO Auto-generated method stub
@@ -254,44 +252,44 @@ public class Interface{
 			}
 		});
 		JButton button2 = new JButton(new Action() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				fc.showOpenDialog(text2);
-				text2.setText(fc.getSelectedFile().toString());
-			}
-			
+				//verifica se path contem o nome do ficehiro que se quer
+				if(fc.getSelectedFile().toString().toLowerCase().contains("spam.log")) {
+					text2.setText(fc.getSelectedFile().toString());
+					spamStatus=true;
+				}else {
+					JOptionPane.showMessageDialog(frame, "Path selecionado nao contem spam.log");
+				}
+				
+			}	
 			@Override
 			public void setEnabled(boolean b) {
 				// TODO Auto-generated method stub
 				
 			}
-			
 			@Override
 			public void removePropertyChangeListener(PropertyChangeListener listener) {
 				// TODO Auto-generated method stub
 				
 			}
-			
 			@Override
 			public void putValue(String key, Object value) {
 				// TODO Auto-generated method stub
 				
 			}
-			
 			@Override
 			public boolean isEnabled() {
 				// TODO Auto-generated method stub
 				return true;
 			}
-			
 			@Override
 			public Object getValue(String key) {
 				// TODO Auto-generated method stub
 				return null;
 			}
-			
 			@Override
 			public void addPropertyChangeListener(PropertyChangeListener listener) {
 				// TODO Auto-generated method stub
@@ -299,48 +297,47 @@ public class Interface{
 			}
 		});
 		JButton button3 = new JButton(new Action() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				fc.showOpenDialog(text3);
-				text3.setText(fc.getSelectedFile().toString());
-			}
-			
+				//verifica se path contem o nome do ficehiro que se quer
+				if(fc.getSelectedFile().toString().toLowerCase().contains("ham.log")) {
+					text3.setText(fc.getSelectedFile().toString());
+					hamStatus=true;
+				}else {
+					JOptionPane.showMessageDialog(frame, "Path selecionado nao contem ham.log");
+				}
+				
+			}		
 			@Override
 			public void setEnabled(boolean b) {
 				// TODO Auto-generated method stub
 				
 			}
-			
 			@Override
 			public void removePropertyChangeListener(PropertyChangeListener listener) {
 				// TODO Auto-generated method stub
 				
 			}
-			
 			@Override
 			public void putValue(String key, Object value) {
 				// TODO Auto-generated method stub
 				
 			}
-			
 			@Override
 			public boolean isEnabled() {
 				// TODO Auto-generated method stub
 				return true;
 			}
-			
 			@Override
 			public Object getValue(String key) {
 				// TODO Auto-generated method stub
 				return null;
 			}
-			
 			@Override
 			public void addPropertyChangeListener(PropertyChangeListener listener) {
 				// TODO Auto-generated method stub
-				
 			}
 		});
 		

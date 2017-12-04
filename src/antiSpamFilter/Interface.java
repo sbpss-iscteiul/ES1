@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -64,7 +65,6 @@ public class Interface{
 		Border border = BorderFactory.createLineBorder(Color.black, 1);
 		container.setAlignmentX(Box.LEFT_ALIGNMENT);
 		ArrayList<Rule> ruleList = leitor.get_Regras();
-		Scanner ruleScanner;
 		String[] columnNames = {"Rule", "Weight"};
 		Object[][] data = new Object[ruleList.size()][2];
 			for(int i=0; i<ruleList.size(); i++){
@@ -85,11 +85,23 @@ public class Interface{
 		});
 		JScrollPane ruleScroll = new JScrollPane(ruleTable);
 		fileWriter = new Writer(ruleList);
-		JButton testButton = new JButton("test buttton");
-		testButton.addActionListener(new ActionListener() {			
+		JButton updateButton = new JButton("Update Table");
+		updateButton.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fileWriter.write();
+			}
+		});
+		
+		JButton addRuleButton = new JButton("Add Rule");
+		addRuleButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String newRuleName = JOptionPane.showInputDialog(frame, "Type in new rule...", null);
+				Rule newRule = new Rule(newRuleName, 0.0);
+				ruleList.add(newRule);
+				((DefaultTableModel) ruleModel).addRow(new Object[]{newRule.getName(), newRule.getPeso()});
+				fileWriter. write();
 			}
 		});
 		
@@ -264,13 +276,17 @@ public class Interface{
 		
 		JPanel centerPanel = new JPanel();
 		centerPanel.setLayout(new GridLayout(1,2));
+		JPanel leftButtonPanel = new JPanel();
+		leftButtonPanel.setLayout(new GridLayout(4,1));
+		leftButtonPanel.add(updateButton);
+		leftButtonPanel.add(addRuleButton);
 		JPanel leftPanel = new JPanel();
 		leftPanel.setLayout(new BorderLayout());
-		leftPanel.add(ruleScroll);
+		leftPanel.add(ruleScroll, BorderLayout.WEST);
+		leftPanel.add(leftButtonPanel);
 		leftPanel.setBorder(border);
 		JPanel rightPanel = new JPanel();
 		rightPanel.setBorder(border);
-		rightPanel.add(testButton);
 		centerPanel.add(leftPanel);
 		centerPanel.add(rightPanel);
 		frame.add(centerPanel);

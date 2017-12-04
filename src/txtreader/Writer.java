@@ -8,19 +8,19 @@ import java.util.ArrayList;
 public class Writer {
 
 	private File file;
-	private ArrayList<Rule> fileList;
+	private ArrayList<Rule> ruleList;
 	private FileWriter fileWriter;
 	
-	public Writer(ArrayList<Rule> fileList){
-		this.fileList = fileList;
+	public Writer(ArrayList<Rule> ruleList){
+		this.ruleList = ruleList;
 	}
 	
 	public void write(){
 		file = new File("src/Documents/rulesTest.cf");
 		try {
 			fileWriter = new FileWriter(file);
-			for(int i=0; i<fileList.size(); i++){
-				fileWriter.write(fileList.get(i)+"\n");
+			for(int i=0; i<ruleList.size(); i++){
+				fileWriter.write(ruleList.get(i)+"\n");
 			}
 			fileWriter.flush();
 			fileWriter.close();
@@ -29,5 +29,8 @@ public class Writer {
 		}
 	}
 	
+	public void addRule(Rule rule){
+		ruleList.add(rule);
+	}
 	
 }

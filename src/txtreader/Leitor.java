@@ -19,7 +19,7 @@ public class Leitor {
 	
 	public void ler_Regras() {
 		try {
-			Scanner sc = new Scanner(new File("src/Documents/rules.cf"));
+			Scanner sc = new Scanner(new File("src/Documents/rulesTest.cf"));
 			int contador=0;
 			String linha="";
 			while(sc.hasNextLine()) {
@@ -28,7 +28,7 @@ public class Leitor {
 			}
 			sc.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("Ficheiro não foi encontrado");
+			System.out.println("Ficheiro nï¿½o foi encontrado");
 		}
 	}
 	
@@ -44,7 +44,7 @@ public class Leitor {
 			}
 			sc.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("Ficheiro não foi encontrado");
+			System.out.println("Ficheiro nï¿½o foi encontrado");
 		} catch (IllegalStateException e) {
 			System.out.println("Ficheiro que que selecionou nao estou correcto");
 			e.getStackTrace();

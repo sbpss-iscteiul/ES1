@@ -37,7 +37,7 @@ public class Leitor {
 				}
 				Rule aux = new Rule(ruleName, peso);
 				regras.add(aux);
-				System.out.println(aux);
+//				System.out.println(aux);
 			}
 			sc.close();
 		} catch (FileNotFoundException e) {
@@ -64,6 +64,7 @@ public class Leitor {
 		try {
 			String source=fonte;
 			Type tipo = type_definition(source);
+			System.out.println(tipo);
 			String linha="";
 			Scanner sc = new Scanner(new File(source));
 			while(sc.hasNextLine()) {
@@ -91,9 +92,9 @@ public class Leitor {
 	
 	private Type type_definition(String source) {
 		Type tipo = null;
-		if(source.contains("ham"))
+		if(source.contains("ham.log"))
 			tipo=Type.HAM;
-		else if(source.contains("spam"))
+		else if(source.contains("spam.log"))
 			tipo=Type.SPAM;
 		else
 			tipo=null;

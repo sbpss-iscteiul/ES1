@@ -19,9 +19,9 @@ public class Emails_Processing {
 	
 	public Emails_Processing(String sourceham,String sourcespam,String sourcerules) {
 		email_reader=new Leitor();
-		email_reader.ler_Regras("C:\\Users\\Sergio-PC\\Desktop\\Universidade\\Engenharia de Software\\Projecto\\Inputs\\rules.cf");
-		email_reader.ler_emails("C:\\Users\\Sergio-PC\\Desktop\\Universidade\\Engenharia de Software\\Projecto\\Inputs\\ham.log");
-		email_reader.ler_emails("C:\\Users\\Sergio-PC\\Desktop\\Universidade\\Engenharia de Software\\Projecto\\Inputs\\spam.log");
+		email_reader.ler_Regras(sourcerules);
+		email_reader.ler_emails(sourceham);
+		email_reader.ler_emails(sourcespam);
 		falsoNegativo=0;
 		falsoPositivo=0;
 		
@@ -30,6 +30,8 @@ public class Emails_Processing {
 	
 	
 	public void avaliar() {
+//		falsoNegativo=0;
+//		falsoPositivo=0;
 		Email correio=null;
 		for (int i=0;i<email_reader.get_Emails().size();i++) {
 			correio= email_reader.get_Emails().get(i);

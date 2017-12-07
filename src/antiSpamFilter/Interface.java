@@ -27,6 +27,8 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+
+import Analise_de_Emails.Emails_Processing;
 import txtreader.Rule;
 import txtreader.Writer;
 import txtreader.Leitor;
@@ -141,7 +143,7 @@ public class Interface{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//adicionado if para que so seja feito o carregamento quando houver um path para este
-				//caso contrário é feito o prompt de uma mensagem de erro 
+				//caso contrï¿½rio ï¿½ feito o prompt de uma mensagem de erro 
 				if(rulesStatus) {
 					ruleModel = new DefaultTableModel(tableUpdater(), columnNames);
 					ruleTable.setModel(ruleModel);
@@ -164,6 +166,43 @@ public class Interface{
 
 
 
+			}
+		});
+		JButton evaluateButton = new JButton(new Action() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Emails_Processing tmp = new Emails_Processing(text3.getText(),text2.getText(), text1.getText());
+				tmp.avaliar();
+				
+			}		
+			@Override
+			public void setEnabled(boolean b) {
+				// TODO Auto-generated method stub
+				
+			}
+			@Override
+			public void removePropertyChangeListener(PropertyChangeListener listener) {
+				// TODO Auto-generated method stub
+				
+			}
+			@Override
+			public void putValue(String key, Object value) {
+				// TODO Auto-generated method stub
+				
+			}
+			@Override
+			public boolean isEnabled() {
+				// TODO Auto-generated method stub
+				return true;
+			}
+			@Override
+			public Object getValue(String key) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			@Override
+			public void addPropertyChangeListener(PropertyChangeListener listener) {
+				// TODO Auto-generated method stub
 			}
 		});
 		
@@ -345,6 +384,7 @@ public class Interface{
 		button1.setText("Browse");
 		button2.setText("Browse");
 		button3.setText("Browse");
+		evaluateButton.setText("EvaluateConfig");
 		
 		//Adicionar os botoes aos paineis de selecï¿½ï¿½o
 		panelN1.add(button1);
@@ -359,6 +399,7 @@ public class Interface{
 		rightPanel = new JPanel();
 		rightPanel.setBorder(border);
 		rightPanel.add(testButton);
+		rightPanel.add(evaluateButton);
 		
 		//adicionar paineis esquerdo e direito ao painel central, e o central ï¿½ frame
 		centerPanel.add(leftPanel);

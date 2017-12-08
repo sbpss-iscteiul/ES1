@@ -13,15 +13,23 @@ public class Leitor {
 	
 	private ArrayList<Rule>regras;
 	private ArrayList<Email>emails;
+	private String source;
+	private ArrayList<Rule>firstlyLoadedRuleList;
+	private boolean firstTime;
 	
+	public void setRegras(ArrayList<Rule> regras) {
+		this.regras = regras;
+	}
+
+
 	public Leitor() {
 		regras=new ArrayList<Rule>();
 		emails=new ArrayList<Email>();
+		firstTime=true;
 	}
 	
 
 	public void ler_Regras(String source) {
-
 		try {
 
 			Scanner sc = new Scanner(new File(source));
@@ -37,14 +45,22 @@ public class Leitor {
 				}
 				Rule aux = new Rule(ruleName, peso);
 				regras.add(aux);
+				
+				this.source=source;
 //				System.out.println(aux);
 			}
+			if(firstTime) {
+				for(Rule i: regras) {
+					firstlyLoadedRuleList.add(i);
+				}
+			}
+			firstTime=false;
 			sc.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("Ficheiro n�o foi encontrado");
+			System.out.println("Ficheiro não foi encontrado");
 		}
 	}
-	public void write_Rules(String source){
+	public void write_Rules(ArrayList<Rule>regras){
 		PrintWriter pw;
 		try {
 			pw = new PrintWriter(new FileOutputStream(new File(source)));
@@ -58,6 +74,12 @@ public class Leitor {
 			e1.printStackTrace();
 		}
 		
+	}
+	public void write_Rules() {
+		write_Rules(regras);
+	}
+	public void resetFileRules() {
+		write_Rules(firstlyLoadedRuleList);
 	}
 	
 	public void ler_emails(String fonte) {

@@ -52,7 +52,6 @@ public class Interface{
 	private JTextField text1;
 	private JTextField text2;
 	private JTextField text3;
-	private int lastRule;
 	
 	
 	public Interface(){
@@ -63,7 +62,6 @@ public class Interface{
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setLayout(new BorderLayout());
-		lastRule=0;
 		//----------------------------
 		//inicializar e adicionar paineis
 		//center
@@ -80,7 +78,6 @@ public class Interface{
 		hamStatus=false;
 		spamStatus=false;
 		leitor = new Leitor();
-//		leitor.ler_Regras("/Users/mohammadmudassir/Desktop/PI_ficheiros/rules.cf");
 
 		text1= new JTextField(25);
 		text2= new JTextField(25);
@@ -93,14 +90,14 @@ public class Interface{
 		frame.setVisible(true);
 	}
 	public Object[][] tableUpdater(){
-		lastRule = 0;
 		leitor.ler_Regras(text1.getText());
 		ArrayList<Rule> ruleList = leitor.get_Regras();
 		Object[][] data = new Object[500][2];
-		while(lastRule<ruleList.size()){
-			data[lastRule][0] = ruleList.get(lastRule).getName();
-			data[lastRule][1] = ruleList.get(lastRule).getPeso();
-			lastRule++;
+		int i=0;
+		while(i<ruleList.size()){
+			data[i][0] = ruleList.get(i).getName();
+			data[i][1] = ruleList.get(i).getPeso();
+			i++;
 		}
 		return data;
 	}
@@ -112,34 +109,30 @@ public class Interface{
 		ArrayList<Rule> ruleList = leitor.get_Regras();
 		String[] columnNames = {"Rule", "Weight"};
 		
-		Object[][] data = new Object[500][2];
-			while(lastRule<ruleList.size()){
-				data[lastRule][0] = ruleList.get(lastRule).getName();
-				data[lastRule][1] = ruleList.get(lastRule).getPeso();
-				lastRule++;
-			}
-		ruleModel = new DefaultTableModel(data, columnNames);
+		ruleModel = new DefaultTableModel(tableUpdater(), columnNames);
 		ruleTable = new JTable(ruleModel);
 		ruleTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-//		ruleModel.addTableModelListener(new TableModelListener() {
-//			@Override
-//			public void tableChanged(TableModelEvent e) {
-//				
-//				System.out.println("uiii");
-//				//possivelmente utilizar o event e
-//				for(int i=0; i<ruleModel.getRowCount(); i++){
-//					Rule tmpRule = new Rule(String.valueOf(ruleModel.getValueAt(i, 0)), Double.valueOf(String.valueOf(ruleModel.getValueAt(i, 1))));
-//					ruleList.set(i, tmpRule);
-//				}
-//			}
-//		});
+		ruleModel.addTableModelListener(new TableModelListener() {
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				
+				System.out.println("uiii");
+				//possivelmente utilizar o event e
+				for(int i=0; i<ruleModel.getRowCount(); i++){
+					Rule tmpRule = new Rule(String.valueOf(ruleModel.getValueAt(i, 0)), Double.valueOf(String.valueOf(ruleModel.getValueAt(i, 1))));
+					ruleList.set(i, tmpRule);
+				}
+				leitor.setRegras(ruleList);
+				leitor.write_Rules();
+			}
+		});
 		JScrollPane ruleScroll = new JScrollPane(ruleTable);
-		
+
 
 //		fileWriter = new Writer(ruleList);
 		
-		JButton testButton = new JButton("Load Rules");
-		testButton.addActionListener(new ActionListener() {			
+		JButton loadButton = new JButton("Load Rules");
+		loadButton.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//adicionado if para que so seja feito o carregamento quando houver um path para este
@@ -168,11 +161,49 @@ public class Interface{
 
 			}
 		});
+		
 		JButton evaluateButton = new JButton(new Action() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Emails_Processing tmp = new Emails_Processing(text3.getText(),text2.getText(), text1.getText());
 				tmp.avaliar();
+				
+			}		
+			@Override
+			public void setEnabled(boolean b) {
+				// TODO Auto-generated method stub
+				
+			}
+			@Override
+			public void removePropertyChangeListener(PropertyChangeListener listener) {
+				// TODO Auto-generated method stub
+				
+			}
+			@Override
+			public void putValue(String key, Object value) {
+				// TODO Auto-generated method stub
+				
+			}
+			@Override
+			public boolean isEnabled() {
+				// TODO Auto-generated method stub
+				return true;
+			}
+			@Override
+			public Object getValue(String key) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			@Override
+			public void addPropertyChangeListener(PropertyChangeListener listener) {
+				// TODO Auto-generated method stub
+			}
+		});
+		JButton resetButton = new JButton(new Action() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				leitor.resetFileRules();
+				loadButton.doClick();
 				
 			}		
 			@Override
@@ -385,6 +416,7 @@ public class Interface{
 		button2.setText("Browse");
 		button3.setText("Browse");
 		evaluateButton.setText("EvaluateConfig");
+		resetButton.setText("Reset Fields");
 		
 		//Adicionar os botoes aos paineis de selec��o
 		panelN1.add(button1);
@@ -398,8 +430,9 @@ public class Interface{
 		//Criar painel da direita
 		rightPanel = new JPanel();
 		rightPanel.setBorder(border);
-		rightPanel.add(testButton);
+		rightPanel.add(loadButton);
 		rightPanel.add(evaluateButton);
+		rightPanel.add(resetButton);
 		
 		//adicionar paineis esquerdo e direito ao painel central, e o central � frame
 		centerPanel.add(leftPanel);

@@ -115,8 +115,7 @@ public class Interface{
 		ruleModel.addTableModelListener(new TableModelListener() {
 			@Override
 			public void tableChanged(TableModelEvent e) {
-				
-				System.out.println("uiii");
+				System.out.println("not printing");
 				//possivelmente utilizar o event e
 				for(int i=0; i<ruleModel.getRowCount(); i++){
 					Rule tmpRule = new Rule(String.valueOf(ruleModel.getValueAt(i, 0)), Double.valueOf(String.valueOf(ruleModel.getValueAt(i, 1))));

@@ -52,7 +52,7 @@ public class Interface{
 	private JTextField text1;
 	private JTextField text2;
 	private JTextField text3;
-	
+	private ArrayList<Rule> ruleList;
 	
 	public Interface(){
 		//Adicionado por sergio
@@ -82,6 +82,7 @@ public class Interface{
 		text1= new JTextField(25);
 		text2= new JTextField(25);
 		text3= new JTextField(25);
+		ruleList = new ArrayList<Rule>();
 		addFrameContent();
 	}
 	
@@ -91,13 +92,12 @@ public class Interface{
 	}
 	public Object[][] tableUpdater(){
 		leitor.ler_Regras(text1.getText());
-		ArrayList<Rule> ruleList = leitor.get_Regras();
+		ruleList = leitor.get_Regras();
 		Object[][] data = new Object[500][2];
-		int i=0;
-		while(i<ruleList.size()){
+		for(int i=0;i<ruleList.size();i++){
 			data[i][0] = ruleList.get(i).getName();
 			data[i][1] = ruleList.get(i).getPeso();
-			i++;
+
 		}
 		return data;
 	}

@@ -24,12 +24,14 @@ public class Leitor {
 
 	public Leitor() {
 		regras=new ArrayList<Rule>();
+		firstlyLoadedRuleList=new ArrayList<Rule>();
 		emails=new ArrayList<Email>();
 		firstTime=true;
 	}
 	
 
 	public void ler_Regras(String source) {
+		regras.clear();
 		try {
 
 			Scanner sc = new Scanner(new File(source));

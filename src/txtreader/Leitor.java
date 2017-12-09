@@ -64,16 +64,18 @@ public class Leitor {
 	}
 	public void write_Rules(ArrayList<Rule>regras){
 		PrintWriter pw;
-		try {
-			pw = new PrintWriter(new FileOutputStream(new File(source)));
-			pw.flush();
-			for(Rule e : regras){
-				pw.println(e.getName() +" "+ e.getPeso());
+		if(source!=null) {
+			try {
+				pw = new PrintWriter(new FileOutputStream(new File(source)));
+				pw.flush();
+				for(Rule e : regras){
+					pw.println(e.getName() +" "+ e.getPeso());
+				}
+				pw.close();
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
-			pw.close();
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		}
 		
 	}
@@ -88,7 +90,6 @@ public class Leitor {
 		try {
 			String source=fonte;
 			Type tipo = type_definition(source);
-			System.out.println(tipo);
 			String linha="";
 			Scanner sc = new Scanner(new File(source));
 			while(sc.hasNextLine()) {

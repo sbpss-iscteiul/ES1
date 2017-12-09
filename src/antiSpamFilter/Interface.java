@@ -23,8 +23,6 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
 import javax.swing.border.Border;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -41,11 +39,6 @@ public class Interface{
 	private JTable ruleTable;
 	private Box container;
 	//cenas para controlo de configura��es
-	private boolean rulesStatus;
-	private boolean hamStatus;
-	private boolean spamStatus;
-
-	private Writer fileWriter;
 	private JPanel centerPanel;
 	private JPanel leftPanel;
 	private JPanel rightPanel;
@@ -74,9 +67,6 @@ public class Interface{
 		rightPanel = new JPanel();
 		//--------------------------
 		container = new Box(2);
-		rulesStatus=false;
-		hamStatus=false;
-		spamStatus=false;
 		leitor = new Leitor();
 
 		text1= new JTextField(25);
@@ -112,19 +102,14 @@ public class Interface{
 		ruleModel = new DefaultTableModel(tableUpdater(), columnNames);
 		ruleTable = new JTable(ruleModel);
 		ruleTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		ruleModel.addTableModelListener(new TableModelListener() {
-			@Override
-			public void tableChanged(TableModelEvent e) {
-				System.out.println("not printing");
-				//possivelmente utilizar o event e
-				for(int i=0; i<ruleModel.getRowCount(); i++){
-					Rule tmpRule = new Rule(String.valueOf(ruleModel.getValueAt(i, 0)), Double.valueOf(String.valueOf(ruleModel.getValueAt(i, 1))));
-					ruleList.set(i, tmpRule);
-				}
-				leitor.setRegras(ruleList);
-				leitor.write_Rules();
-			}
-		});
+//		ruleModel.addTableModelListener(new TableModelListener() {
+//			@Override
+//			public void tableChanged(TableModelEvent e) {
+//				System.out.println("not printing");
+//				//possivelmente utilizar o event e
+				
+//			}
+//		});
 		JScrollPane ruleScroll = new JScrollPane(ruleTable);
 
 
@@ -136,14 +121,11 @@ public class Interface{
 			public void actionPerformed(ActionEvent e) {
 				//adicionado if para que so seja feito o carregamento quando houver um path para este
 				//caso contr�rio � feito o prompt de uma mensagem de erro 
-				if(rulesStatus) {
 					ruleModel = new DefaultTableModel(tableUpdater(), columnNames);
 					ruleTable.setModel(ruleModel);
 					ruleTable.revalidate();
 					ruleScroll.repaint();
-				}else {
-					JOptionPane.showMessageDialog(frame, "nao ha um ficheiro regras selecionado");
-				}
+				
 				
 				
 				
@@ -162,6 +144,7 @@ public class Interface{
 		});
 		
 		JButton evaluateButton = new JButton(new Action() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Emails_Processing tmp = new Emails_Processing(text3.getText(),text2.getText(), text1.getText());
@@ -204,6 +187,49 @@ public class Interface{
 				leitor.resetFileRules();
 				loadButton.doClick();
 				
+			}		
+			@Override
+			public void setEnabled(boolean b) {
+				// TODO Auto-generated method stub
+				
+			}
+			@Override
+			public void removePropertyChangeListener(PropertyChangeListener listener) {
+				// TODO Auto-generated method stub
+				
+			}
+			@Override
+			public void putValue(String key, Object value) {
+				// TODO Auto-generated method stub
+				
+			}
+			@Override
+			public boolean isEnabled() {
+				// TODO Auto-generated method stub
+				return true;
+			}
+			@Override
+			public Object getValue(String key) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			@Override
+			public void addPropertyChangeListener(PropertyChangeListener listener) {
+				// TODO Auto-generated method stub
+			}
+		});
+		JButton saveButton = new JButton(new Action() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for(int i=0; i<ruleModel.getRowCount(); i++){
+					if(ruleModel.getValueAt(i, 0) != null && ruleModel.getValueAt(i, 1) != null ) {
+						Rule tmpRule = new Rule(String.valueOf(ruleModel.getValueAt(i, 0)), Double.valueOf(String.valueOf(ruleModel.getValueAt(i, 1))));
+						ruleList.set(i, tmpRule);
+					}
+				}
+				leitor.setRegras(ruleList);
+				leitor.write_Rules();
+				loadButton.doClick();
 			}		
 			@Override
 			public void setEnabled(boolean b) {
@@ -280,7 +306,6 @@ public class Interface{
 				//verifica se path contem o nome do ficehiro que se quer
 				if(fc.getSelectedFile().toString().toLowerCase().contains("rules.cf")) {
 					text1.setText(fc.getSelectedFile().toString());
-					rulesStatus=true;
 				}else {
 					JOptionPane.showMessageDialog(frame, "Path selecionado nao contem rules.cf");
 				}
@@ -328,7 +353,6 @@ public class Interface{
 				//verifica se path contem o nome do ficehiro que se quer
 				if(fc.getSelectedFile().toString().toLowerCase().contains("spam.log")) {
 					text2.setText(fc.getSelectedFile().toString());
-					spamStatus=true;
 				}else {
 					JOptionPane.showMessageDialog(frame, "Path selecionado nao contem spam.log");
 				}
@@ -373,7 +397,6 @@ public class Interface{
 				//verifica se path contem o nome do ficehiro que se quer
 				if(fc.getSelectedFile().toString().toLowerCase().contains("ham.log")) {
 					text3.setText(fc.getSelectedFile().toString());
-					hamStatus=true;
 				}else {
 					JOptionPane.showMessageDialog(frame, "Path selecionado nao contem ham.log");
 				}
@@ -416,6 +439,7 @@ public class Interface{
 		button3.setText("Browse");
 		evaluateButton.setText("EvaluateConfig");
 		resetButton.setText("Reset Fields");
+		saveButton.setText("Save");
 		
 		//Adicionar os botoes aos paineis de selec��o
 		panelN1.add(button1);
@@ -432,6 +456,7 @@ public class Interface{
 		rightPanel.add(loadButton);
 		rightPanel.add(evaluateButton);
 		rightPanel.add(resetButton);
+		rightPanel.add(saveButton);
 		
 		//adicionar paineis esquerdo e direito ao painel central, e o central � frame
 		centerPanel.add(leftPanel);

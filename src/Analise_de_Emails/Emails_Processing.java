@@ -29,7 +29,7 @@ public class Emails_Processing {
 	
 	
 	
-	public void avaliar() {
+	public String avaliar() {
 //		falsoNegativo=0;
 //		falsoPositivo=0;
 		Email correio=null;
@@ -37,8 +37,8 @@ public class Emails_Processing {
 			correio= email_reader.get_Emails().get(i);
 			avaliar_regras(correio);
 		}
-		System.out.println("Este conjunto de emails tem "+falsoNegativo+" falsos negativos e "+falsoPositivo+" falsos positivos");
-		
+//		System.out.println("Este conjunto de emails tem "+falsoNegativo+" falsos negativos e "+falsoPositivo+" falsos positivos");
+		return "Este conjunto de emails tem "+falsoNegativo+" falsos negativos e "+falsoPositivo+" falsos positivos";
 	}
 	
 	private void avaliar_regras(Email mail) {
@@ -52,8 +52,8 @@ public class Emails_Processing {
 			regrasNames.add(email_reader.get_Regras().get(i).getName());
 		}
 		//vai ver se o nome da regra esta contido na lista de nomes de regras
-		for(int j=0;j<rules_email_input.size();j++) {
-			if(regrasNames.contains(rules_email_input.get(j)))
+		for(int j=0;j<regrasNames.size();j++) {
+			if(rules_email_input.contains(regrasNames.get(j)))
 				somatorio_de_regras+=email_reader.get_Regras().get(j).getPeso();
 		}
 		if(somatorio_de_regras>=5.0) {

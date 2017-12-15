@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
@@ -42,6 +43,7 @@ public class Interface{
 	private JPanel centerPanel;
 	private JPanel leftPanel;
 	private JPanel rightPanel;
+	private JPanel leftButtonPanel;
 	private JTextField text1;
 	private JTextField text2;
 	private JTextField text3;
@@ -63,7 +65,10 @@ public class Interface{
 		//centerLeft
 		leftPanel = new JPanel();
 		leftPanel.setLayout(new BorderLayout());
-		//centerright
+		//centerLeftRight
+		leftButtonPanel = new JPanel();
+		leftButtonPanel.setLayout(new GridLayout(3,1));
+		//centerRight
 		rightPanel = new JPanel();
 		//--------------------------
 		container = new Box(2);
@@ -83,7 +88,7 @@ public class Interface{
 	public Object[][] tableUpdater(){
 		leitor.ler_Regras(text1.getText());
 		ruleList = leitor.get_Regras();
-		Object[][] data = new Object[500][2];
+		Object[][] data = new Object[ruleList.size()][2];
 		for(int i=0;i<ruleList.size();i++){
 			data[i][0] = ruleList.get(i).getName();
 			data[i][1] = ruleList.get(i).getPeso();
@@ -102,18 +107,13 @@ public class Interface{
 		ruleModel = new DefaultTableModel(tableUpdater(), columnNames);
 		ruleTable = new JTable(ruleModel);
 		ruleTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-//		ruleModel.addTableModelListener(new TableModelListener() {
-//			@Override
-//			public void tableChanged(TableModelEvent e) {
-//				System.out.println("not printing");
-//				//possivelmente utilizar o event e
-				
-//			}
-//		});
 		JScrollPane ruleScroll = new JScrollPane(ruleTable);
 
-
-//		fileWriter = new Writer(ruleList);
+		JTextArea manualTextArea = new JTextArea();
+		JScrollPane manualScroll = new JScrollPane(manualTextArea);
+		
+		JTextArea autoTextArea = new JTextArea();
+		JScrollPane autoScroll = new JScrollPane(autoTextArea);
 		
 		JButton loadButton = new JButton("Load Rules");
 		loadButton.addActionListener(new ActionListener() {			
@@ -125,100 +125,42 @@ public class Interface{
 					ruleTable.setModel(ruleModel);
 					ruleTable.revalidate();
 					ruleScroll.repaint();
-				
-				
-				
-				
-				//Duarte- guardar contudo da tabela num segundo ficheiro.
-//				if(rulesStatus)
-//					fileWriter.write();
-//				else {
-//					//Teste by sergio
-//					JOptionPane.showMessageDialog(frame, "nao ha um ficheiro regras selecionado");
-//				}
-//				leitor.ler_Regras(text1.getText());
-
-
-
 			}
 		});
 		
-		JButton evaluateButton = new JButton(new Action() {
-
+		JButton manualEvaluateButton = new JButton("Evaluate Manually");
+		JPanel manualButtonPanel = new JPanel();
+		manualButtonPanel.setLayout(new FlowLayout());
+		manualButtonPanel.add(manualEvaluateButton);
+		manualEvaluateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Emails_Processing tmp = new Emails_Processing(text3.getText(),text2.getText(), text1.getText());
-				tmp.avaliar();
-				
+				manualTextArea.setText(tmp.avaliar());
 			}		
+		});
+		
+		JButton autoEvaluateButton = new JButton("Evaluate Automatically");
+		JPanel autoButtonPanel = new JPanel();
+		autoButtonPanel.setLayout(new FlowLayout());
+		autoButtonPanel.add(autoEvaluateButton);
+		autoEvaluateButton.addActionListener(new ActionListener() {
 			@Override
-			public void setEnabled(boolean b) {
-				// TODO Auto-generated method stub
-				
-			}
-			@Override
-			public void removePropertyChangeListener(PropertyChangeListener listener) {
-				// TODO Auto-generated method stub
-				
-			}
-			@Override
-			public void putValue(String key, Object value) {
-				// TODO Auto-generated method stub
-				
-			}
-			@Override
-			public boolean isEnabled() {
-				// TODO Auto-generated method stub
-				return true;
-			}
-			@Override
-			public Object getValue(String key) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			@Override
-			public void addPropertyChangeListener(PropertyChangeListener listener) {
-				// TODO Auto-generated method stub
+			public void actionPerformed(ActionEvent e) {
+				//FALTA FAZER ISTO MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 			}
 		});
-		JButton resetButton = new JButton(new Action() {
+		
+		JButton resetButton = new JButton("Reset");
+		resetButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				leitor.resetFileRules();
 				loadButton.doClick();
-				
-			}		
-			@Override
-			public void setEnabled(boolean b) {
-				// TODO Auto-generated method stub
-				
-			}
-			@Override
-			public void removePropertyChangeListener(PropertyChangeListener listener) {
-				// TODO Auto-generated method stub
-				
-			}
-			@Override
-			public void putValue(String key, Object value) {
-				// TODO Auto-generated method stub
-				
-			}
-			@Override
-			public boolean isEnabled() {
-				// TODO Auto-generated method stub
-				return true;
-			}
-			@Override
-			public Object getValue(String key) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			@Override
-			public void addPropertyChangeListener(PropertyChangeListener listener) {
-				// TODO Auto-generated method stub
-			}
+						}
 		});
-		JButton saveButton = new JButton(new Action() {
+		JButton saveButton = new JButton("Save");
+		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				for(int i=0; i<ruleModel.getRowCount(); i++){
@@ -230,38 +172,9 @@ public class Interface{
 				leitor.setRegras(ruleList);
 				leitor.write_Rules();
 				loadButton.doClick();
-			}		
-			@Override
-			public void setEnabled(boolean b) {
-				// TODO Auto-generated method stub
-				
-			}
-			@Override
-			public void removePropertyChangeListener(PropertyChangeListener listener) {
-				// TODO Auto-generated method stub
-				
-			}
-			@Override
-			public void putValue(String key, Object value) {
-				// TODO Auto-generated method stub
-				
-			}
-			@Override
-			public boolean isEnabled() {
-				// TODO Auto-generated method stub
-				return true;
-			}
-			@Override
-			public Object getValue(String key) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			@Override
-			public void addPropertyChangeListener(PropertyChangeListener listener) {
-				// TODO Auto-generated method stub
 			}
 		});
-		
+
 		//painel Norte (aka file chooser)
 		JFileChooser fc = new JFileChooser();
 		JPanel northPanel = new JPanel();
@@ -299,7 +212,8 @@ public class Interface{
 		panelN3.add(text3);
 		
 		//criar os botoes para cada painel de selecionado
-		JButton button1 = new JButton(new Action() {
+		JButton button1 = new JButton("Browse");
+		button1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fc.showOpenDialog(text1);
@@ -310,42 +224,10 @@ public class Interface{
 					JOptionPane.showMessageDialog(frame, "Path selecionado nao contem rules.cf");
 				}
 			}
-			@Override
-			public void setEnabled(boolean b) {
-				// TODO Auto-generated method stub
-				
-			}
-			@Override
-			public void removePropertyChangeListener(PropertyChangeListener listener) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void putValue(String key, Object value) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public boolean isEnabled() {
-				// TODO Auto-generated method stub
-				return true;
-			}
-			
-			@Override
-			public Object getValue(String key) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			@Override
-			public void addPropertyChangeListener(PropertyChangeListener listener) {
-				// TODO Auto-generated method stub
-				
-			}
 		});
-		JButton button2 = new JButton(new Action() {
+		
+		JButton button2 = new JButton("Browse");
+		button2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -355,41 +237,12 @@ public class Interface{
 					text2.setText(fc.getSelectedFile().toString());
 				}else {
 					JOptionPane.showMessageDialog(frame, "Path selecionado nao contem spam.log");
-				}
-				
-			}	
-			@Override
-			public void setEnabled(boolean b) {
-				// TODO Auto-generated method stub
-				
-			}
-			@Override
-			public void removePropertyChangeListener(PropertyChangeListener listener) {
-				// TODO Auto-generated method stub
-				
-			}
-			@Override
-			public void putValue(String key, Object value) {
-				// TODO Auto-generated method stub
-				
-			}
-			@Override
-			public boolean isEnabled() {
-				// TODO Auto-generated method stub
-				return true;
-			}
-			@Override
-			public Object getValue(String key) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			@Override
-			public void addPropertyChangeListener(PropertyChangeListener listener) {
-				// TODO Auto-generated method stub
-				
+				}	
 			}
 		});
-		JButton button3 = new JButton(new Action() {
+		
+		JButton button3 = new JButton("Browse");
+		button3.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -399,47 +252,9 @@ public class Interface{
 					text3.setText(fc.getSelectedFile().toString());
 				}else {
 					JOptionPane.showMessageDialog(frame, "Path selecionado nao contem ham.log");
-				}
-				
-			}		
-			@Override
-			public void setEnabled(boolean b) {
-				// TODO Auto-generated method stub
-				
-			}
-			@Override
-			public void removePropertyChangeListener(PropertyChangeListener listener) {
-				// TODO Auto-generated method stub
-				
-			}
-			@Override
-			public void putValue(String key, Object value) {
-				// TODO Auto-generated method stub
-				
-			}
-			@Override
-			public boolean isEnabled() {
-				// TODO Auto-generated method stub
-				return true;
-			}
-			@Override
-			public Object getValue(String key) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			@Override
-			public void addPropertyChangeListener(PropertyChangeListener listener) {
-				// TODO Auto-generated method stub
+				}	
 			}
 		});
-		
-		//Colocar texto nos botoes 
-		button1.setText("Browse");
-		button2.setText("Browse");
-		button3.setText("Browse");
-		evaluateButton.setText("EvaluateConfig");
-		resetButton.setText("Reset Fields");
-		saveButton.setText("Save");
 		
 		//Adicionar os botoes aos paineis de selec��o
 		panelN1.add(button1);
@@ -447,16 +262,22 @@ public class Interface{
 		panelN3.add(button3);
 		
 		//Criar painel esquerda (Lista de Regras)
+		leftButtonPanel.setBorder(border);
+		leftButtonPanel.add(loadButton);
+		leftButtonPanel.add(resetButton);
+		leftButtonPanel.add(saveButton);
+		leftPanel.add(leftButtonPanel, BorderLayout.EAST);
 		leftPanel.add(ruleScroll);
 		leftPanel.setBorder(border);
 		
 		//Criar painel da direita
 		rightPanel = new JPanel();
+		rightPanel.setLayout(new GridLayout(5,1));
 		rightPanel.setBorder(border);
-		rightPanel.add(loadButton);
-		rightPanel.add(evaluateButton);
-		rightPanel.add(resetButton);
-		rightPanel.add(saveButton);
+		rightPanel.add(manualButtonPanel);
+		rightPanel.add(manualScroll);
+		rightPanel.add(autoButtonPanel);
+		rightPanel.add(autoScroll);
 		
 		//adicionar paineis esquerdo e direito ao painel central, e o central � frame
 		centerPanel.add(leftPanel);

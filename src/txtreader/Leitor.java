@@ -37,10 +37,11 @@ public class Leitor {
 			Scanner sc = new Scanner(new File(source));
 			String ruleName="";
 			double peso=0.0;
-			while(sc.hasNext()) {
-				ruleName=sc.next();
-				if(sc.hasNextDouble()){
-					peso=sc.nextDouble();
+			while(sc.hasNextLine()) {
+				String[] line = sc.nextLine().split(" ");
+				ruleName=line[0];
+				if (line.length>0) {
+					peso=Double.parseDouble(line[1]);
 				}
 				else{
 					peso=0.0;
@@ -49,7 +50,6 @@ public class Leitor {
 				regras.add(aux);
 				
 				this.source=source;
-//				System.out.println(aux);
 			}
 			if(firstTime) {
 				for(Rule i: regras) {

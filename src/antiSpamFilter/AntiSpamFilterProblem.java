@@ -1,17 +1,29 @@
 package antiSpamFilter;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.uma.jmetal.problem.impl.AbstractDoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 
-public class AntiSpamFilterProblem extends AbstractDoubleProblem {
+import Analise_de_Emails.Emails_Processing;
+import txtreader.Email;
+import txtreader.Leitor;
+import txtreader.Rule;
+import txtreader.Type;
 
-	// TESTESSSDEEWCEFEWVe
+public class AntiSpamFilterProblem extends AbstractDoubleProblem {
+	private Leitor tmp;
+	  
 	  public AntiSpamFilterProblem() {
 	    // 10 variables (anti-spam filter rules) by default 
-	    this(10);
+	    this(335);
+	    tmp = new Leitor();
+	    tmp.ler_emails("C:\\Users\\Sergio-PC\\Desktop\\Universidade\\Engenharia de Software\\Projecto\\Inputs\\ham.log");
+	    tmp.ler_emails("C:\\Users\\Sergio-PC\\Desktop\\Universidade\\Engenharia de Software\\Projecto\\Inputs\\spam.log");
+	    tmp.ler_Regras("C:\\Users\\Sergio-PC\\Desktop\\Universidade\\Engenharia de Software\\Projecto\\Inputs\\rules.cf");
+	    
 	  }
 
 	  public AntiSpamFilterProblem(Integer numberOfVariables) {
@@ -32,24 +44,55 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	  }
 
 	  public void evaluate(DoubleSolution solution){
-	    double aux, xi, xj;
 	    double[] fx = new double[getNumberOfObjectives()];
 	    double[] x = new double[getNumberOfVariables()];
 	    for (int i = 0; i < solution.getNumberOfVariables(); i++) {
-	      x[i] = solution.getVariableValue(i) ;
-	    }
-
-	    fx[0] = 0.0;
-	    for (int var = 0; var < solution.getNumberOfVariables() - 1; var++) {
-		  fx[0] += Math.abs(x[0]); // Example for testing
+	     x[i] = solution.getVariableValue(i) ;
 	    }
 	    
-	    fx[1] = 0.0;
-	    for (int var = 0; var < solution.getNumberOfVariables(); var++) {
-	    	fx[1] += Math.abs(x[1]); // Example for testing
+	    /*Implementação do falso positivos e falsos negativos*/
+	    int falsos_negativos=0;
+	    int falsos_positivos=0;
+	    ArrayList<String> tmp_para_leitura = tmp.get_RulesNames();
+	    //corre a lista de emails (email a email)
+	    for(Email j:tmp.get_Emails()) {
+	    	//corre a lista de nomes de regras (nome a nome)
+	    	double somatorio_de_regras = 0.0;
+	    	int size = j.getRegras().size();
+	    	int contadorSize=0;
+	    	for(int k=0;k<tmp_para_leitura.size();k++){
+	    		//vai ver se o nome da regra esta dentro da lista de regras do email
+	    		if(j.getRegras().contains(tmp_para_leitura.get(k))) {
+	    			somatorio_de_regras+=x[k];
+	    			contadorSize++;
+	    		}
+	    		if(contadorSize==size)
+	    			break;
+	    	}
+	    	if(somatorio_de_regras>5.0 && j.getTipo().equals(Type.HAM)) {
+	    		falsos_positivos++;
+	    	}
+	    	if(somatorio_de_regras<5.0 && j.getTipo().equals(Type.SPAM)) {
+	    		falsos_negativos++;
+	    	}
 	    }
-
+	    
+	    
+	    fx[0]=0.0+falsos_positivos;
+	    fx[1]=0.0+falsos_negativos;
+	    
+	    
+	    
+	    
+	    /*----------------------------------------------*/
+	    
+//	    fx[0]=0.0;
+//	    fx[1]=0.0; 
+	    
+//	    System.out.println("FP"+fx[0] + "  FN"+fx[1]);
+	    
 	    solution.setObjective(0, fx[0]);
 	    solution.setObjective(1, fx[1]);
+		  
 	  }
 	}

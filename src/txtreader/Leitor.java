@@ -13,33 +13,37 @@ public class Leitor {
 	
 	private ArrayList<Rule>regras;
 	private ArrayList<Email>emails;
+	private ArrayList<String>rulesNames;
 	
 	public Leitor() {
 		regras=new ArrayList<Rule>();
 		emails=new ArrayList<Email>();
+		rulesNames=new ArrayList<String>();
 	}
 	
 
 	public void ler_Regras(String source) {
-
 		try {
-
 			Scanner sc = new Scanner(new File(source));
 			String ruleName="";
 			double peso=0.0;
-			while(sc.hasNext()) {
-				ruleName=sc.next();
-				if(sc.hasNextDouble()){
-					peso=sc.nextDouble();
+			int contador = 0;
+			String [] tmp= null;
+			while(sc.hasNextLine()) {
+				tmp= sc.nextLine().split("	");
+				if(tmp.length>1){
+					peso=Double.parseDouble(tmp[1]);
 				}
 				else{
-					peso=0.0;
+					peso=5.0;
 				}
-				Rule aux = new Rule(ruleName, peso);
+				rulesNames.add(tmp[0]);
+				Rule aux = new Rule(tmp[0], peso);
 				regras.add(aux);
-				System.out.println(aux);
+				contador++;
 			}
 			sc.close();
+//			System.out.println("Foram usadas "+contador+" regras");
 		} catch (FileNotFoundException e) {
 			System.out.println("Ficheiro n�o foi encontrado");
 		}
@@ -66,11 +70,18 @@ public class Leitor {
 			Type tipo = type_definition(source);
 			String linha="";
 			Scanner sc = new Scanner(new File(source));
+			int contadorEmails=0;
 			while(sc.hasNextLine()) {
 				linha=sc.nextLine();
 				tratar_email(linha, tipo);
+				contadorEmails++;
+	
 			}
 			sc.close();
+//			System.out.println("Parametros");
+//			System.out.println("	path:"+fonte);
+//			System.out.println("	type:"+tipo);
+//			System.out.println("	number of emails:"+contadorEmails);
 		} catch (FileNotFoundException e) {
 			System.out.println("Ficheiro n�o foi encontrado");
 		} catch (IllegalStateException e) {
@@ -115,6 +126,10 @@ public class Leitor {
 	
 	public ArrayList<Rule> get_Regras(){
 		return regras;
+	}
+	
+	public ArrayList<String> get_RulesNames(){
+		return rulesNames;
 	}
 
 }

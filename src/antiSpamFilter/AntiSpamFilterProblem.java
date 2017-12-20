@@ -13,9 +13,9 @@ import txtreader.Rule;
 public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		private ArrayList<Email>ham;
 		private ArrayList<Email>spam;
-		private String srcHam="C:\\Users\\Sergio-PC\\Desktop\\Universidade\\Engenharia de Software\\Projecto\\Inputs\\ham.log";
-		private String srcSpam="C:\\Users\\Sergio-PC\\Desktop\\Universidade\\Engenharia de Software\\Projecto\\Inputs\\spam.log";
-		private String srcRules="C:\\Users\\Sergio-PC\\Desktop\\Universidade\\Engenharia de Software\\Projecto\\Inputs\\rules.cf";
+		private String srcHam="/Users/mohammadmudassir/Desktop/ES_ficheiros/ham.log";
+		private String srcSpam="/Users/mohammadmudassir/Desktop/ES_ficheiros/spam.log";
+		private String srcRules="/Users/mohammadmudassir/Desktop/ES_ficheiros/rules.cf";
 
 	  
 	  public AntiSpamFilterProblem() {
@@ -30,6 +30,9 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		  tmp.read_Email(srcSpam);
 		  ham=tmp.getHam();
 		  spam=tmp.getSpam();
+		  System.out.println(ham.size());
+		  System.out.println(spam.size());
+		  System.out.println( tmp.getRules().size());
 		  tmp=null;
 	  }
 	  

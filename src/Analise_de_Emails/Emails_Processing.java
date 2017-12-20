@@ -13,8 +13,33 @@ public class Emails_Processing {
 			this.spam=spam;
 			this.ham=ham;
 			this.weights=weights;
+			
 	}
 	
+	public ArrayList<Email> getSpam() {
+		return spam;
+	}
+
+	public void setSpam(ArrayList<Email> spam) {
+		this.spam = spam;
+	}
+
+	public ArrayList<Email> getHam() {
+		return ham;
+	}
+
+	public void setHam(ArrayList<Email> ham) {
+		this.ham = ham;
+	}
+
+	public ArrayList<Double> getWeights() {
+		return weights;
+	}
+
+	public void setWeights(ArrayList<Double> weights) {
+		this.weights = weights;
+	}
+
 	public int calcFN() {
 		int FN = 0;
 		for(Email e:spam) {
@@ -29,7 +54,7 @@ public class Emails_Processing {
 		}
 		return FN;
 	} 
-		
+		 
 	public int calcFP() {
 		int FP = 0;
 		for(Email e:ham) {

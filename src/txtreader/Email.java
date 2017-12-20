@@ -12,6 +12,12 @@ public class Email {
 		this.rules=new ArrayList<Rule>();
 	}
 	
+	
+	public void setRules(ArrayList<Rule> rules) {
+		this.rules = rules;
+	}
+
+
 	public void add_Rules(Rule Rule) {
 		rules.add(Rule);
 	}

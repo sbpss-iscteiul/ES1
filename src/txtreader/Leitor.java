@@ -50,7 +50,7 @@ public class Leitor {
 					rules.add(ruleContent[0]);
 					if(firstTime) { fweights.add(0.0);}
 					weights.add(0.0);
-				}else {
+ 				}else {
 					rules.add(ruleContent[0]);
 					weights.add(Double.parseDouble(ruleContent[1]));
 					if(firstTime) {fweights.add(Double.parseDouble(ruleContent[1]));}

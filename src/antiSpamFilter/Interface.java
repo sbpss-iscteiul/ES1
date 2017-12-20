@@ -6,9 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -28,8 +26,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import Analise_de_Emails.Emails_Processing;
-import txtreader.Rule;
-import txtreader.Writer;
 import txtreader.Leitor;
 
 public class Interface{
@@ -277,7 +273,7 @@ public class Interface{
 				}else {
 					JOptionPane.showMessageDialog(frame, "Path selecionado nao contem ham.log");
 				}	
-			}
+			} 
 		});
 		
 		//Adicionar os botoes aos paineis de selec��o

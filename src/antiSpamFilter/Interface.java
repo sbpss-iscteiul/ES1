@@ -150,6 +150,8 @@ public class Interface{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(!leitor.getRules().isEmpty()) {
+					leitor.getSpam().clear();
+					leitor.getHam().clear();
 					leitor.read_Email(text2.getText());
 					leitor.read_Email(text3.getText());
 					Emails_Processing tmp = new Emails_Processing(leitor.getSpam(), leitor.getHam(), weights);
@@ -176,23 +178,24 @@ public class Interface{
 		resetButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				leitor.resetFileRules();
-//				loadButton.doClick();
+				leitor.reset_Rules(text1.getText());
+				loadButton.doClick();
 			}
 		});
 		JButton saveButton = new JButton("Save");
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				for(int i=0; i<ruleModel.getRowCount(); i++){
-//					if(ruleModel.getValueAt(i, 0) != null && ruleModel.getValueAt(i, 1) != null ) {
-//						Rule tmpRule = new Rule(String.valueOf(ruleModel.getValueAt(i, 0)), Double.valueOf(String.valueOf(ruleModel.getValueAt(i, 1))));
-//						ruleList.set(i, tmpRule);
-//					}
-//				}
-//				leitor.setRegras(ruleList);
-//				leitor.write_Rules();
-//				loadButton.doClick();
+				for(int i=0; i<ruleModel.getRowCount(); i++){
+					if(ruleModel.getValueAt(i, 0) != null && ruleModel.getValueAt(i, 1) != null ) {
+						ruleList.set(i, String.valueOf(ruleModel.getValueAt(i, 0)));
+						weights.set(i, Double.valueOf(String.valueOf(ruleModel.getValueAt(i, 1))));
+					}
+				}
+				leitor.setRules(ruleList);
+				leitor.setWeights(weights);
+				leitor.write_Rules(text1.getText());
+				loadButton.doClick();
 			}
 		});
 

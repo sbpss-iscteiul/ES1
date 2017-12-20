@@ -31,6 +31,7 @@ class RuleTest {
 		Rule a = new Rule("capsLock", 1);
 		assertEquals(1, a.getId());
 		assertEquals("capsLock", a.getName());
+		
 	}
 
 	@Test

@@ -5,37 +5,29 @@ import java.util.ArrayList;
 public class Email {
 	
 	private String emailName;
-	private ArrayList<String> regras;
-	private Type tipo;
+	private ArrayList<Rule> rules;
 	
-	public Email(String nomeEmail, Type tipo) {
+	public Email(String nomeEmail) {
 		this.emailName=nomeEmail;
-		this.regras=new ArrayList<String>();
-		this.tipo=tipo;
+		this.rules=new ArrayList<Rule>();
 	}
 	
-	public void adicionar_Regras(String Rule) {
-		regras.add(Rule);
+	public void add_Rules(Rule Rule) {
+		rules.add(Rule);
 	}
 
 	public String getEmailName() {
 		return emailName;
 	}
 
-	public ArrayList<String> getRegras() {
-		return regras;
+	public ArrayList<Rule> getRules() {
+		return rules;
 	}
-
-	public Type getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(Type tipo) {
-		this.tipo = tipo;
-	}
+	
+	
 	
 	@Override
 	public String toString() {
-		return "Email name: "+emailName+"Email rules: "+regras;
+		return "Email name:"+emailName;
 	}
 }

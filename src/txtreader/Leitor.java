@@ -7,140 +7,135 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import txtreader.Rule;
-
 public class Leitor {
 	
-	private ArrayList<Rule>regras;
-	private ArrayList<Email>emails;
-	private String source;
-	private ArrayList<Rule>firstlyLoadedRuleList;
-	private boolean firstTime;
+	private ArrayList<String> rules;
+	private ArrayList<Email> spam;
+	private ArrayList<Email> ham;
+	private ArrayList<Double> weights;
+	private int nRegras;
+	private int contadorEmails=0;
 	
-	public void setRegras(ArrayList<Rule> regras) {
-		this.regras = regras;
-	}
-
-
 	public Leitor() {
-		regras=new ArrayList<Rule>();
-		firstlyLoadedRuleList=new ArrayList<Rule>();
-		emails=new ArrayList<Email>();
-		firstTime=true;
+		rules = new ArrayList<String>();
+		spam = new ArrayList<Email>();
+		ham = new ArrayList<Email>();
+		weights= new ArrayList<Double>();
 	}
 	
-
-	public void ler_Regras(String source) {
-		regras.clear();
+	public void read_Rules(String source) {
+		int contador=0;
 		try {
-
 			Scanner sc = new Scanner(new File(source));
-			String ruleName="";
-			double peso=0.0;
+			String [] ruleContent=null;
 			while(sc.hasNextLine()) {
-				String[] line = sc.nextLine().split(" ");
-				ruleName=line[0];
-				if (line.length>0) {
-					peso=Double.parseDouble(line[1]);
+				ruleContent=sc.nextLine().split("	");
+				if(ruleContent.length<2) {
+					rules.add(ruleContent[0]);
+					weights.add(0.0);
+				}else {
+					rules.add(ruleContent[0]);
+					weights.add(Double.parseDouble(ruleContent[1]));
 				}
-				else{
-					peso=0.0;
-				}
-				Rule aux = new Rule(ruleName, peso);
-				regras.add(aux);
-				
-				this.source=source;
+				contador++;
 			}
-			if(firstTime) {
-				for(Rule i: regras) {
-					firstlyLoadedRuleList.add(i);
-				}
-			}
-			firstTime=false;
 			sc.close();
+			ruleContent=null;
+			nRegras=contador;
 		} catch (FileNotFoundException e) {
-			System.out.println("Ficheiro nÃ£o foi encontrado");
+			System.out.println("Ficheiro não foi encontrado");
 		}
+		
 	}
-	public void write_Rules(ArrayList<Rule>regras){
+	
+	public void write_Rules(String source) {
 		PrintWriter pw;
-		if(source!=null) {
-			try {
-				pw = new PrintWriter(new FileOutputStream(new File(source)));
-				pw.flush();
-				for(Rule e : regras){
-					pw.println(e.getName() +" "+ e.getPeso());
-				}
-				pw.close();
-			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+		try {
+			pw = new PrintWriter(new FileOutputStream(new File(source)));
+			pw.flush();
+			for(int i=0;i<rules.size();i++) {
+				pw.println(rules.get(i)+"	"+weights.get(i));
 			}
+			pw.close();
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		
-	}
-	public void write_Rules() {
-		write_Rules(regras);
-	}
-	public void resetFileRules() {
-		write_Rules(firstlyLoadedRuleList);
 	}
 	
-	public void ler_emails(String fonte) {
+	public void read_Email(String source){
 		try {
-			String source=fonte;
-			Type tipo = type_definition(source);
-			String linha="";
 			Scanner sc = new Scanner(new File(source));
 			while(sc.hasNextLine()) {
-				linha=sc.nextLine();
-				tratar_email(linha, tipo);
+				tratarLine(sc.nextLine(),source);
+				contadorEmails++;
 			}
 			sc.close();
+			System.out.println(contadorEmails);
 		} catch (FileNotFoundException e) {
-			System.out.println("Ficheiro nï¿½o foi encontrado");
-		} catch (IllegalStateException e) {
-			System.out.println("Ficheiro que que selecionou nao estou correcto");
-			e.getStackTrace();
+			System.out.println("Ficheiro não foi encontrado");
 		}
+	}
+	
+	private void tratarLine(String nextLine, String source) {
+		String [] line_content=nextLine.split("	");
+		Email tmp = new Email(line_content[0]);
+		for(int i=1;i<line_content.length;i++) {
+			String ruleName=line_content[i];
+			try {
+				int id = listPosition(ruleName);
+				if(id==-1)
+					throw new IllegalArgumentException();
+				tmp.add_Rules(new Rule(ruleName, id));
+			} catch (IllegalArgumentException e) {
+				//System.out.println("Regras:"+ruleName+" não está contida na lista de regras");
+			}
+		}
+		if(source.contains("spam.log")) {
+			spam.add(tmp);
+		}else if(source.contains("ham.log")) {
+			ham.add(tmp);
+		}
+	}
+	
+	private int listPosition(String ruleName) {
+		for(int i=0;i<rules.size();i++) {
+			if(rules.get(i).equals(ruleName)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	public ArrayList<String> getRules() {
+		return rules;
+	}
+
+	public ArrayList<Email> getSpam() {
+		return spam;
+	}
+
+	public ArrayList<Email> getHam() {
+		return ham;
+	}
+
+	public ArrayList<Double> getWeights() {
+		return weights;
+	}
+	
+	public void setWeights(int pos,double peso) {
+		weights.set(pos, peso);
+	}
+
+	public int getnRegras() {
+		return nRegras;
+	}
 		
-	}
 	
-	public void imprimir_resultados(){
-		for(int i=0;i<regras.size();i++) {
-			System.out.println(regras.get(i));
-		}
-		for(int j=0;j<emails.size();j++) {
-			System.out.println(emails.get(j));
-		}
-	}
 	
-	private Type type_definition(String source) {
-		Type tipo = null;
-		if(source.contains("ham.log"))
-			tipo=Type.HAM;
-		else if(source.contains("spam.log"))
-			tipo=Type.SPAM;
-		else
-			tipo=null;
-		return tipo;
-	}
 	
-	private void tratar_email(String linha, Type tipo) {
-		String []tmpVector = linha.split("	");
-		Email tmpEmail = new Email(tmpVector[0], tipo);
-		for(int i=1;i<tmpVector.length;i++) {
-			tmpEmail.adicionar_Regras(tmpVector[i]);
-		}
-		emails.add(tmpEmail);
-	}
-
-	public ArrayList<Email> get_Emails() {
-		return emails;
-	}
 	
-	public ArrayList<Rule> get_Regras(){
-		return regras;
-	}
-
+	
+	
+	
 }

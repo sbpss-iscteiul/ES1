@@ -3,19 +3,15 @@ package txtreader;
 public class Rule {
 	
 	private String Name;
-	private double Peso;
+	private int Id;
 	
-	public Rule(String name, double peso){
+	public Rule(String name, int id){
 		this.Name=name;
-		this.Peso=peso;
+		this.Id=id;
 	}
 	
-	public double getPeso() {
-		return Peso;
-	}
-
-	public void setPeso(double peso) {
-		Peso = peso;
+	public int getId() {
+		return Id;
 	}
 
 	public String getName() {
@@ -24,8 +20,6 @@ public class Rule {
 
 	@Override
 	public String toString() {
-		String tostring=this.Name+"		"+this.Peso;
-		return tostring;
+		return "Nome:"+Name+" Id:"+Id;
 	}
 }
-

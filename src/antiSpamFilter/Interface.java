@@ -47,7 +47,8 @@ public class Interface{
 	private JTextField text1;
 	private JTextField text2;
 	private JTextField text3;
-	private ArrayList<Rule> ruleList;
+	private ArrayList<String> ruleList;
+	private ArrayList<Double> weights;
 	
 	public Interface(){
 		//Adicionado por sergio
@@ -72,12 +73,14 @@ public class Interface{
 		rightPanel = new JPanel();
 		//--------------------------
 		container = new Box(2);
+		
 		leitor = new Leitor();
-
+		
 		text1= new JTextField(25);
 		text2= new JTextField(25);
 		text3= new JTextField(25);
-		ruleList = new ArrayList<Rule>();
+		ruleList = new ArrayList<String>();
+		weights = new ArrayList<Double>();
 		addFrameContent();
 	}
 	
@@ -85,13 +88,15 @@ public class Interface{
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setVisible(true);
 	}
+	
 	public Object[][] tableUpdater(){
-		leitor.ler_Regras(text1.getText());
-		ruleList = leitor.get_Regras();
+		leitor.read_Rules(text1.getText());
+		ruleList = leitor.getRules();
+		weights = leitor.getWeights();
 		Object[][] data = new Object[ruleList.size()][2];
 		for(int i=0;i<ruleList.size();i++){
-			data[i][0] = ruleList.get(i).getName();
-			data[i][1] = ruleList.get(i).getPeso();
+			data[i][0] = ruleList.get(i);
+			data[i][1] = weights.get(i);
 
 		}
 		return data;
@@ -101,7 +106,7 @@ public class Interface{
 		Border border = BorderFactory.createLineBorder(Color.black, 1);
 		container.setAlignmentX(Box.LEFT_ALIGNMENT);
 		//lista de regras
-		ArrayList<Rule> ruleList = leitor.get_Regras();
+//		ArrayList<Rule> ruleList = leitor.get_Regras();
 		String[] columnNames = {"Rule", "Weight"};
 		
 		ruleModel = new DefaultTableModel(tableUpdater(), columnNames);
@@ -129,14 +134,30 @@ public class Interface{
 		});
 		
 		JButton manualEvaluateButton = new JButton("Evaluate Manually");
+		JPanel subPanel = new JPanel();
+		subPanel.setLayout(new GridLayout(1,2));
+		JTextField FN = new JTextField("Falsos Negativos");
+		FN.setEnabled(false);
+		JTextField FP = new JTextField("Falsos Positivos");
+		FP.setEnabled(false);
+		subPanel.add(FN);
+		subPanel.add(FP);
 		JPanel manualButtonPanel = new JPanel();
-		manualButtonPanel.setLayout(new FlowLayout());
+		manualButtonPanel.setLayout(new GridLayout(2,1));
 		manualButtonPanel.add(manualEvaluateButton);
+		manualButtonPanel.add(subPanel);
 		manualEvaluateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Emails_Processing tmp = new Emails_Processing(text3.getText(),text2.getText(), text1.getText());
-				manualTextArea.setText(tmp.avaliar());
+				if(!leitor.getRules().isEmpty()) {
+					leitor.read_Email(text2.getText());
+					leitor.read_Email(text3.getText());
+					Emails_Processing tmp = new Emails_Processing(leitor.getSpam(), leitor.getHam(), weights);
+	//				manualTextArea.setText(tmp.avaliar());
+					FN.setText(""+tmp.calcFN());
+					FP.setText(""+tmp.calcFP());
+				}
+				
 			}		
 		});
 		
@@ -155,23 +176,23 @@ public class Interface{
 		resetButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				leitor.resetFileRules();
-				loadButton.doClick();
-						}
+//				leitor.resetFileRules();
+//				loadButton.doClick();
+			}
 		});
 		JButton saveButton = new JButton("Save");
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				for(int i=0; i<ruleModel.getRowCount(); i++){
-					if(ruleModel.getValueAt(i, 0) != null && ruleModel.getValueAt(i, 1) != null ) {
-						Rule tmpRule = new Rule(String.valueOf(ruleModel.getValueAt(i, 0)), Double.valueOf(String.valueOf(ruleModel.getValueAt(i, 1))));
-						ruleList.set(i, tmpRule);
-					}
-				}
-				leitor.setRegras(ruleList);
-				leitor.write_Rules();
-				loadButton.doClick();
+//				for(int i=0; i<ruleModel.getRowCount(); i++){
+//					if(ruleModel.getValueAt(i, 0) != null && ruleModel.getValueAt(i, 1) != null ) {
+//						Rule tmpRule = new Rule(String.valueOf(ruleModel.getValueAt(i, 0)), Double.valueOf(String.valueOf(ruleModel.getValueAt(i, 1))));
+//						ruleList.set(i, tmpRule);
+//					}
+//				}
+//				leitor.setRegras(ruleList);
+//				leitor.write_Rules();
+//				loadButton.doClick();
 			}
 		});
 

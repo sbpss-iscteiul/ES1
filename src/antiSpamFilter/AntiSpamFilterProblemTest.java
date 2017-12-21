@@ -28,7 +28,7 @@ class AntiSpamFilterProblemTest {
 
 	@Test
 	void testAntiSpamFilterProblem() {
-		AntiSpamFilterProblem a = new AntiSpamFilterProblem();
+		AntiSpamFilterProblem a = new AntiSpamFilterProblem("");
 		a.setupData();
 		assertEquals(335, a.getNumberOfVariables());
 	}

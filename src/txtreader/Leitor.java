@@ -23,7 +23,7 @@ public class Leitor {
 	boolean firstTime=true;
 	
 	public Leitor() {
-		rules = new ArrayList<String>();
+		rules = new ArrayList<String>(); 
 		spam = new ArrayList<Email>();
 		ham = new ArrayList<Email>();
 		weights= new ArrayList<Double>();
@@ -68,7 +68,7 @@ public class Leitor {
 			pw = new PrintWriter(new FileOutputStream(new File(source)));
 			pw.flush();
 			for(int i=0;i<rules.size();i++) {
-				pw.println(rules.get(i)+"	"+weights.get(i));
+				pw.println(rules.get(i)+" "+weights.get(i));
 			}
 			pw.close();
 		} catch (FileNotFoundException e1) {
@@ -101,7 +101,7 @@ public class Leitor {
 	}
 	
 	private void tratarLine(String nextLine, String source) {
-		String [] line_content=nextLine.split("	");
+		String [] line_content=nextLine.split(" ");
 		Email tmp = new Email(line_content[0]);
 		for(int i=1;i<line_content.length;i++) {
 			String ruleName=line_content[i];

@@ -25,12 +25,12 @@ public class AntiSpamFilterAutomaticConfiguration {
   private static final int INDEPENDENT_RUNS = 5 ;
 
   public static void main(String[] args) throws IOException {
-    String experimentBaseDirectory = "experimentBaseDirectory";
+    String experimentBaseDirectory = args[0]+"experimentBaseDirectory"; 
 
     //isto � um teste
     
     List<ExperimentProblem<DoubleSolution>> problemList = new ArrayList<>();
-    problemList.add(new ExperimentProblem<>(new AntiSpamFilterProblem()));
+    problemList.add(new ExperimentProblem<>(new AntiSpamFilterProblem(args[0])));
 
     List<ExperimentAlgorithm<DoubleSolution, List<DoubleSolution>>> algorithmList =
             configureAlgorithmList(problemList);

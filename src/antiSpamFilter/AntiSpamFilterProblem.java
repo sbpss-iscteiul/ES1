@@ -15,12 +15,16 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		private ArrayList<Email>spam;
 		private String srcHam="/Users/mohammadmudassir/Desktop/ES_ficheiros/ham.log";
 		private String srcSpam="/Users/mohammadmudassir/Desktop/ES_ficheiros/spam.log";
-		private String srcRules="/Users/mohammadmudassir/Desktop/ES_ficheiros/rules.cf";
+		private String srcRules="/Users/mohammadmudassir/Desktop/ES_ficheiros/rules.cf"; 
 
 	  
-	  public AntiSpamFilterProblem() {
+	  public AntiSpamFilterProblem(String source) {
 	    // 10 variables (anti-spam filter rules) by default 
-	    this(335);
+		  this(335);
+		  srcHam=source+"ham.log";
+		  srcSpam=source+"spam.log";
+		  srcRules=source+"rules.cf";
+	    
 	  }
 
 	  public void setupData() {

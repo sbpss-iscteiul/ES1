@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -150,7 +151,7 @@ public class Interface{
 			public void actionPerformed(ActionEvent e) {
 				if(!leitor.getRules().isEmpty()) {
 					leitor.getSpam().clear();
-					leitor.getHam().clear();
+					leitor.getHam().clear(); 
 					leitor.read_Email(text2.getText());
 					leitor.read_Email(text3.getText());
 					Emails_Processing tmp = new Emails_Processing(leitor.getSpam(), leitor.getHam(), weights);
@@ -169,7 +170,13 @@ public class Interface{
 		autoEvaluateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//FALTA FAZER ISTO MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+				try {
+					String source1= text1.getText().replaceAll("rules.cf", "");
+					AntiSpamFilterAutomaticConfiguration.main(new String[0]);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
@@ -292,7 +299,7 @@ public class Interface{
 		leftButtonPanel.add(saveButton);
 		leftPanel.add(leftButtonPanel, BorderLayout.EAST);
 		leftPanel.add(ruleScroll);
-		leftPanel.setBorder(border);
+		leftPanel.setBorder(border); 
 		
 		//Criar painel da direita
 		rightPanel = new JPanel();

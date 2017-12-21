@@ -57,7 +57,7 @@ public class Leitor {
 			ruleContent=null;
 			nRegras=contador;
 		} catch (FileNotFoundException e) {
-			System.out.println("Ficheiro n�o foi encontrado");
+			System.out.println("Ficheiro nao foi encontrado");
 		}
 		
 	}

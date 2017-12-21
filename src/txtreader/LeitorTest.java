@@ -75,16 +75,11 @@ class LeitorTest {
 		regras.add("ALL_TRUSTED");
 		regras.add("DNS_FROM_RFC_DSN");
 		Leitor leitor=new Leitor();
+		leitor.read_Rules("C:\\Users\\Ruben\\Desktop\\rules2s");
 		leitor.read_Rules("C:\\Users\\Ruben\\Desktop\\rules2.txt");
 		for(int i=0; i<11;i++) {
 			assertEquals(regras.get(i), leitor.getRules().get(i));
 		}	
-//		leitor.read_Rules("C:\\Users\\Ruben\\Desktop\\rules4.txt");
-//		double x= 0.0;
-//		for(int i=0; i<11;i++) {
-//			assertEquals(regras.get(i), leitor.getRules().get(i));
-//			assertEquals(x , leitor.getWeights().get(i));
-//		}
 	}
 
 	@Test
@@ -97,13 +92,17 @@ class LeitorTest {
 
 	@Test
 	void testReset_Rules() {
-		fail("Not yet implemented");
+		Leitor leitor=new Leitor();
+		leitor.read_Rules("C:\\Users\\Ruben\\Desktop\\rules5.txt");
+		leitor.reset_Rules("C:\\Users\\Ruben\\Desktop\\rules5.txt");
 	}
 
 	@Test
 	void testRead_Email() {
 		Leitor leitor=new Leitor();
 		leitor.read_Email("C:\\Users\\Ruben\\Desktop\\rules4.txt");
+		leitor.read_Email("C:\\Users\\Ruben\\Desktop\\rules4");
+		
 	}
 
 	@Test
@@ -114,17 +113,14 @@ class LeitorTest {
 
 	@Test
 	void testGetSpam() {
-		Email teste = new Email(b);
-		a.getSpam().add(teste);
-		assertEquals(a.getSpam(), teste);
-	
+		Leitor leitor = new Leitor();
+		Email teste = new Email("ola");
+		leitor.getSpam().add(teste);
+		assertEquals(leitor.getSpam().get(leitor.getSpam().size()-1), teste);
 	}
 
 	@Test
 	void testGetHam() {
-//		Email teste = new Email(b);
-//		a.getHam().add(teste);
-//		assertEquals(a.getHam(), teste);
 		Leitor leitor = new Leitor();
 		Email teste = new Email("ola");
 		leitor.getHam().add(teste);
@@ -141,10 +137,6 @@ class LeitorTest {
 	void testSetWeightsIntDouble() {
 		Leitor teste = new Leitor();
 		ArrayList<Double> weights = new ArrayList<Double>();
-//		weights.set(0, e);
-//		weights.set(1, f);
-//		teste.setWeights(weights);
-//		assertEquals(g, teste.getWeights());
 		weights.add(0.5);
 		teste.setWeights(weights);
 		teste.setWeights(0, 0.7);

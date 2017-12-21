@@ -26,7 +26,7 @@ public class Leitor {
 	private ArrayList<Double> fweights;
 	private int nRegras;
 	private int contadorEmails=0;
-	boolean firstTime;
+	boolean firstTime=true;
 	
 	public Leitor() {
 		rules = new ArrayList<String>();
@@ -35,7 +35,6 @@ public class Leitor {
 		weights= new ArrayList<Double>();
 		fweights= new ArrayList<Double>();
 		frules = new ArrayList<String>();
-		firstTime=true;
 	}
 	
 	public void read_Rules(String source) {
@@ -60,6 +59,7 @@ public class Leitor {
 			}
 			sc.close();
 			firstTime=false;
+			System.out.println(firstTime);
 			ruleContent=null;
 			nRegras=contador;
 		} catch (FileNotFoundException e) {
@@ -86,6 +86,8 @@ public class Leitor {
 		write_Rules(source,rules,weights);
 	}
 	public void reset_Rules(String source) {
+		setRules(frules);
+		setWeights(fweights);
 		write_Rules(source,frules,fweights);
 	}
 	
@@ -156,6 +158,33 @@ public class Leitor {
 
 	public int getnRegras() {
 		return nRegras;
+	}
+	public ArrayList<Double> config(int line) {
+		ArrayList<Double> doubles = new ArrayList<Double>();
+		try {
+			
+			Scanner scanner = new Scanner(new File("/Users/mohammadmudassir/Desktop/ES_ficheiros/VAR0.tsv"));
+			while(scanner.hasNextLine()) {
+				for(int i=0;i<line-1;i++) {
+					scanner.nextLine();
+				}
+				if(scanner.hasNextLine()) {
+					
+					String[] weights= scanner.nextLine().split(" ");
+					for(int j=0;j< weights.length;j++) {
+						doubles.add(Double.parseDouble(weights[j]));
+					}
+				}
+				break;
+				
+			}
+			scanner.close();
+
+		}
+		catch(FileNotFoundException e) {
+			
+		}
+		return doubles;
 	}
 		
 	

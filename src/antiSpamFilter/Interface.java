@@ -24,7 +24,6 @@ import javax.swing.WindowConstants;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-
 import Analise_de_Emails.Emails_Processing;
 import txtreader.Leitor;
 
@@ -45,7 +44,9 @@ public class Interface{
 	private JTextField text3;
 	private ArrayList<String> ruleList;
 	private ArrayList<Double> weights;
-	
+	private JScrollPane ruleScroll;
+	private String[] columnNames = {"Rule", "Weight"};
+
 	public Interface(){
 		//Adicionado por sergio
 		//criar frame
@@ -97,22 +98,27 @@ public class Interface{
 		}
 		return data;
 	}
+	public void refresh() {
+		ruleModel = new DefaultTableModel(tableUpdater(), columnNames);
+		ruleTable.setModel(ruleModel);
+		ruleTable.revalidate();
+		ruleScroll.repaint();
+	}
 	public void addFrameContent (){
 
 		Border border = BorderFactory.createLineBorder(Color.black, 1);
 		container.setAlignmentX(Box.LEFT_ALIGNMENT);
 		//lista de regras
 //		ArrayList<Rule> ruleList = leitor.get_Regras();
-		String[] columnNames = {"Rule", "Weight"};
 		
 		ruleModel = new DefaultTableModel(tableUpdater(), columnNames);
 		ruleTable = new JTable(ruleModel);
 		ruleTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		JScrollPane ruleScroll = new JScrollPane(ruleTable);
+		ruleScroll = new JScrollPane(ruleTable);
 
-		JTextArea manualTextArea = new JTextArea();
-		JScrollPane manualScroll = new JScrollPane(manualTextArea);
-		
+//		JTextArea manualTextArea = new JTextArea();
+//		JScrollPane manualScroll = new JScrollPane(manualTextArea);
+//		
 		JTextArea autoTextArea = new JTextArea();
 		JScrollPane autoScroll = new JScrollPane(autoTextArea);
 		
@@ -122,10 +128,7 @@ public class Interface{
 			public void actionPerformed(ActionEvent e) {
 				//adicionado if para que so seja feito o carregamento quando houver um path para este
 				//caso contr�rio � feito o prompt de uma mensagem de erro 
-					ruleModel = new DefaultTableModel(tableUpdater(), columnNames);
-					ruleTable.setModel(ruleModel);
-					ruleTable.revalidate();
-					ruleScroll.repaint();
+					refresh();
 			}
 		});
 		
@@ -175,6 +178,7 @@ public class Interface{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				leitor.reset_Rules(text1.getText());
+				refresh();
 				loadButton.doClick();
 			}
 		});
@@ -295,7 +299,7 @@ public class Interface{
 		rightPanel.setLayout(new GridLayout(5,1));
 		rightPanel.setBorder(border);
 		rightPanel.add(manualButtonPanel);
-		rightPanel.add(manualScroll);
+//		rightPanel.add(manualScroll);
 		rightPanel.add(autoButtonPanel);
 		rightPanel.add(autoScroll);
 		

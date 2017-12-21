@@ -12,13 +12,7 @@ public class Leitor {
 	
 	private ArrayList<String> rules;
 	private ArrayList<String> frules;
-	public void setRules(ArrayList<String> rules) {
-		this.rules = rules;
-	}
 
-	public void setWeights(ArrayList<Double> weights) {
-		this.weights = weights;
-	}
 
 	private ArrayList<Email> spam;
 	private ArrayList<Email> ham;
@@ -74,7 +68,7 @@ public class Leitor {
 			pw = new PrintWriter(new FileOutputStream(new File(source)));
 			pw.flush();
 			for(int i=0;i<rules.size();i++) {
-				pw.println(rules.get(i)+" "+weights.get(i));
+				pw.println(rules.get(i)+"	"+weights.get(i));
 			}
 			pw.close();
 		} catch (FileNotFoundException e1) {
@@ -102,7 +96,7 @@ public class Leitor {
 			sc.close();
 //			System.out.println(contadorEmails);
 		} catch (FileNotFoundException e) {
-			System.out.println("Ficheiro n�o foi encontrado");
+			System.out.println("Ficheiro nao foi encontrado");
 		}
 	}
 	
@@ -159,6 +153,7 @@ public class Leitor {
 	public int getnRegras() {
 		return nRegras;
 	}
+	
 	public ArrayList<Double> config(int line) {
 		ArrayList<Double> doubles = new ArrayList<Double>();
 		try {
@@ -185,6 +180,14 @@ public class Leitor {
 			
 		}
 		return doubles;
+	}
+	public void setRules(ArrayList<String> rules) {
+		this.rules = rules;
+	}
+
+	public void setWeights(ArrayList<Double> weights) {
+		this.weights = weights; 
+
 	}
 		
 	

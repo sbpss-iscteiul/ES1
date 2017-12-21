@@ -147,7 +147,13 @@ class LeitorTest {
 	@Test
 	void testGetnRegras() {
 		Leitor leitor = new Leitor();
-		leitor.getnRegras();
+		leitor.read_Rules("C:\\Users\\Ruben\\Desktop\\rules.cf");
+		assertEquals(335, leitor.getnRegras());	
 	}
 
+	@Test
+	void testconfig() {
+		Leitor leitor = new Leitor();
+		leitor.config(3);
+	}
 }

@@ -158,7 +158,7 @@ public class Leitor {
 		ArrayList<Double> doubles = new ArrayList<Double>();
 		try {
 			
-			Scanner scanner = new Scanner(new File("/Users/mohammadmudassir/Desktop/ES_ficheiros/VAR0.tsv"));
+			Scanner scanner = new Scanner(new File("C:\\Users\\Ruben\\Desktop\\ES1\\VAR0.tsv"));
 			while(scanner.hasNextLine()) {
 				for(int i=0;i<line-1;i++) {
 					scanner.nextLine();
@@ -177,7 +177,7 @@ public class Leitor {
 
 		}
 		catch(FileNotFoundException e) {
-			
+			System.out.println("Ficheiro nao foi encontrado");
 		}
 		return doubles;
 	}

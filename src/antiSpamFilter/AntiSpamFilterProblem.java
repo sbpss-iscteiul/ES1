@@ -46,7 +46,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
 	    List<Double> lowerLimit = new ArrayList<>(getNumberOfVariables()) ;
 	    List<Double> upperLimit = new ArrayList<>(getNumberOfVariables()) ;
-
+ 
 	    for (int i = 0; i < getNumberOfVariables(); i++) {
 	      lowerLimit.add(-5.0);
 	      upperLimit.add(5.0);

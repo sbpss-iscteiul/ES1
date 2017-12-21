@@ -27,7 +27,7 @@ public class AntiSpamFilterAutomaticConfiguration {
   public static void main(String[] args) throws IOException {
     String experimentBaseDirectory = "experimentBaseDirectory";
 
-    //isto é um teste
+    //isto ï¿½ um teste
     
     List<ExperimentProblem<DoubleSolution>> problemList = new ArrayList<>();
     problemList.add(new ExperimentProblem<>(new AntiSpamFilterProblem()));

@@ -1,47 +1,50 @@
 package antiSpamFilter;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 class AntiSpamFilterProblemTest {
 
-	@BeforeClass
+	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 	}
 
-	@AfterClass
+	@AfterAll
 	static void tearDownAfterClass() throws Exception {
 	}
 
-	@Before
+	@BeforeEach
 	void setUp() throws Exception {
 	}
 
-	@After
+	@AfterEach
 	void tearDown() throws Exception {
 	}
 
 	@Test
 	void testAntiSpamFilterProblem() {
-		AntiSpamFilterProblem a = new AntiSpamFilterProblem("");
-		a.setupData();
+		AntiSpamFilterProblem a = new AntiSpamFilterProblem("C:\\Users\\Ruben\\Desktop");
+		a.setupData("C:\\Users\\Ruben\\Desktop");
 		assertEquals(335, a.getNumberOfVariables());
 	}
 
 	@Test
 	void testAntiSpamFilterProblemInteger() {
-		AntiSpamFilterProblem a = new AntiSpamFilterProblem(50, );
+		AntiSpamFilterProblem a = new AntiSpamFilterProblem(50,"C:\\Users\\Ruben\\Desktop" );
 		assertEquals(50, a.getNumberOfVariables());
 	}
 
 	@Test
 	void testEvaluate() {
-		AntiSpamFilterProblem a = new AntiSpamFilterProblem(50);
+		AntiSpamFilterProblem a = new AntiSpamFilterProblem(50,"C:\\Users\\Ruben\\Desktop");
 		a.evaluate(null);
 		assertNotNull(a);
 	}

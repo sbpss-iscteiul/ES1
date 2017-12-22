@@ -149,5 +149,10 @@ class LeitorTest {
 		Leitor leitor = new Leitor();
 		leitor.getnRegras();
 	}
-
+	
+	@Test
+	void testconfig() {
+		Leitor teste = new Leitor();
+		teste.config(1);
+	}
 }

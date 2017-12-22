@@ -1,23 +1,31 @@
 package antiSpamFilter;
 
-import static org.junit.Assert.*;
-import org.junit.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 class InterfaceTest {
 
-	@BeforeClass
+	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 	}
 
-	@AfterClass
+	@AfterAll
 	static void tearDownAfterClass() throws Exception {
 	}
 
-	@Before
+	@BeforeEach
 	void setUp() throws Exception {
 	}
 
-	@After
+	@AfterEach
 	void tearDown() throws Exception {
 	}
 

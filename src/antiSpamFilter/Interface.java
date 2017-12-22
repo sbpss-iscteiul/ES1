@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -34,6 +33,8 @@ import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import org.apache.commons.io.FileUtils;
+
 import Analise_de_Emails.Emails_Processing;
 import txtreader.Leitor;
 
@@ -54,6 +55,7 @@ public class Interface{
 	private JTextField text3;
 	private ArrayList<String> ruleList;
 	private ArrayList<Double> weights;
+	private ArrayList<Double> autoWeights;
 	private JScrollPane ruleScroll;
 	private String[] columnNames = {"Rule", "Weight"};
 
@@ -88,6 +90,7 @@ public class Interface{
 		text3= new JTextField(25);
 		ruleList = new ArrayList<String>();
 		weights = new ArrayList<Double>();
+		autoWeights = new ArrayList<Double>();
 		addFrameContent();
 	}
 	
@@ -117,48 +120,14 @@ public class Interface{
 	public void addFrameContent (){
 
 		Border border = BorderFactory.createLineBorder(Color.black, 1);
-		container.setAlignmentX(Box.LEFT_ALIGNMENT);
-		//lista de regras
-//		ArrayList<Rule> ruleList = leitor.get_Regras();
-		
+		container.setAlignmentX(Box.LEFT_ALIGNMENT);		
 		ruleModel = new DefaultTableModel(tableUpdater(), columnNames);
 		ruleTable = new JTable(ruleModel);
 		ruleTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		ruleScroll = new JScrollPane(ruleTable);
-//		
-		DefaultListModel<String> autoListModel = new DefaultListModel<String>();
-		try{
-			Scanner scannerVar = new Scanner(new File("C:\\Users\\duart\\Desktop\\experimentBaseDirectory\\AntiSpamStudy\\data\\NSGAII\\AntiSpamFilterProblem\\VAR0.tsv"));
-			Scanner scannerFun = new Scanner(new File("C:\\Users\\duart\\Desktop\\experimentBaseDirectory\\AntiSpamStudy\\data\\NSGAII\\AntiSpamFilterProblem\\FUN0.tsv"));
-			ArrayList<String> funLinesFP = new ArrayList<String>();
-			while(scannerFun.hasNextLine()){
-				String[] tempFun = scannerFun.nextLine().split(" ");
-				funLinesFP.add(tempFun[0]);
-			}
-			scannerFun.close();
-			int minFunValue = funLinesFP.indexOf(Collections.min(funLinesFP));
-			System.out.println(minFunValue);
-			int i=0;
-			while(scannerVar.hasNextLine()){
-				if(i==minFunValue){
-					String[] tempVar = scannerVar.nextLine().split(" ");
-					for(int j=0; j<tempVar.length; j++){
-						autoListModel.addElement(tempVar[j]);
-					}
-					scannerVar.close();
-					break;
-				}
-				i++;
-			}
-			
-		}catch(FileNotFoundException e){
-			System.out.println("FICHEIRO TESTE NÃO ECNCONTRADO");
-		}
+
 		
-		JList autoList = new JList(autoListModel);
-		JTextArea autoTextArea = new JTextArea();
-		JScrollPane autoScroll = new JScrollPane(autoList);
-		
+		Emails_Processing tmp = new Emails_Processing(leitor.getSpam(), leitor.getHam(), weights);
 		JButton loadButton = new JButton("Load Rules");
 		loadButton.addActionListener(new ActionListener() {			
 			@Override
@@ -188,10 +157,11 @@ public class Interface{
 				if(!leitor.getRules().isEmpty()) {
 					leitor.getSpam().clear();
 					leitor.getHam().clear(); 
+					leitor.read_Rules(text1.getText());
 					leitor.read_Email(text2.getText());
 					leitor.read_Email(text3.getText());
-					Emails_Processing tmp = new Emails_Processing(leitor.getSpam(), leitor.getHam(), weights);
 	//				manualTextArea.setText(tmp.avaliar());
+					tmp.setWeights(weights);
 					manualFN.setText(""+tmp.calcFN());
 					manualFP.setText(""+tmp.calcFP());
 				}
@@ -216,23 +186,64 @@ public class Interface{
 		autoEvaluateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					String source1= text1.getText().replaceAll("rules.cf", "");
-					AntiSpamFilterAutomaticConfiguration.main(source1);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+//				ArrayList<Double> autoWeights = new ArrayList<Double>();
+				String source1= text1.getText().replaceAll("rules.cf", "");
+				try{
+					Scanner scannerVar = new Scanner(new File(source1+"experimentBaseDirectory/AntiSpamStudy/data/NSGAII/AntiSpamFilterProblem/VAR0.tsv"));
+					Scanner scannerFun = new Scanner(new File(source1+"experimentBaseDirectory/AntiSpamStudy/data/NSGAII/AntiSpamFilterProblem/FUN0.tsv"));
+					ArrayList<Double> funLinesFP = new ArrayList<Double>();
+					while(scannerFun.hasNextLine()){
+						String[] tempFun = scannerFun.nextLine().split(" ");
+						funLinesFP.add(Double.parseDouble(tempFun[0]));
+					}
+					scannerFun.close();
+					int minFunValue = funLinesFP.indexOf(Collections.min(funLinesFP));
+					int i=0;
+					while(scannerVar.hasNextLine()){
+						if(i==minFunValue){
+							String[] tempVar = scannerVar.nextLine().split(" ");
+							System.out.println("temVar    "+tempVar.length);
+							for(int j=0; j<tempVar.length; j++){
+								autoWeights.add(Double.parseDouble(tempVar[j]));
+							}
+							scannerVar.close();
+							break;
+						}
+						i++;
+					}
+					
+				}catch(FileNotFoundException e1){
+					System.out.println("FICHEIRO TESTE NÃO ECNCONTRADO");
 				}
-			}
-		});
+					try {
+						FileUtils.cleanDirectory(new File(source1+"experimentBaseDirectory/AntiSpamStudy/data/NSGAII/AntiSpamFilterProblem"));
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					while((new File(source1+"experimentBaseDirectory/AntiSpamStudy/data/NSGAII/AntiSpamFilterProblem").listFiles().length)<3) {
+								try {
+									AntiSpamFilterAutomaticConfiguration.main(source1);									
+									System.out.println("imprimi");
+									
+								} catch (IOException e1) {
+								} catch (org.uma.jmetal.util.JMetalException e1) {
+								}
+					}
+					System.out.println("sucesso");
+
+					tmp.setWeights(autoWeights);
+					autoFN.setText(""+tmp.calcFN());
+					autoFP.setText(""+tmp.calcFP());
+					}
+					});
+
 		autoSaveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<Double> autoWeights = new ArrayList<Double>();
-				for(int i=0; i<autoListModel.size(); i++){
-					autoWeights.add(Double.parseDouble(autoListModel.get(i)));
-				}
 				leitor.write_Rules(text1.getText(), ruleList, autoWeights);
+				loadButton.doClick();
+//				refresh();
 			}
 		});
 		
@@ -365,7 +376,7 @@ public class Interface{
 //		rightPanel.add(manualScroll);
 		rightPanel.add(autoButtonPanel);
 		rightPanel.add(autoSubPanel);
-		rightPanel.add(autoScroll);
+//		rightPanel.add(autoScroll);
 		
 		//adicionar paineis esquerdo e direito ao painel central, e o central � frame
 		centerPanel.add(leftPanel);

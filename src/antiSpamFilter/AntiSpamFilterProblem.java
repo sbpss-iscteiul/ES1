@@ -13,22 +13,23 @@ import txtreader.Rule;
 public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		private ArrayList<Email>ham;
 		private ArrayList<Email>spam;
-		private String srcHam="/Users/mohammadmudassir/Desktop/ES_ficheiros/ham.log";
-		private String srcSpam="/Users/mohammadmudassir/Desktop/ES_ficheiros/spam.log";
-		private String srcRules="/Users/mohammadmudassir/Desktop/ES_ficheiros/rules.cf"; 
+		private String srcHam;
+		private String srcSpam;
+		private String srcRules;
 
 	  
 	  public AntiSpamFilterProblem(String source) {
 	    // 10 variables (anti-spam filter rules) by default 
-		  this(335);
-		  srcHam=source+"ham.log";
-		  srcSpam=source+"spam.log";
-		  srcRules=source+"rules.cf";
+		  this(335, source);
 	    
 	  }
 
-	  public void setupData() {
+	  public void setupData(String source) {
 		  Leitor tmp=new Leitor();
+
+		  srcHam=source+"ham.log";
+		  srcSpam=source+"spam.log";
+		  srcRules=source+"rules.cf";
 		  tmp.read_Rules(srcRules);
 		  tmp.read_Email(srcHam);
 		  tmp.read_Email(srcSpam);
@@ -40,9 +41,9 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		  tmp=null;
 	  }
 	  
-	  public AntiSpamFilterProblem(Integer numberOfVariables) {
+	  public AntiSpamFilterProblem(Integer numberOfVariables, String source) {
 		//-----------inicializar variaveis necessarias---------------//
-		setupData();
+		setupData(source);
 		//---------------------------------------//
 	    setNumberOfVariables(numberOfVariables);
 	    setNumberOfObjectives(2);

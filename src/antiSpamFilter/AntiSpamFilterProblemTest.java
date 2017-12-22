@@ -1,28 +1,28 @@
 package antiSpamFilter;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 class AntiSpamFilterProblemTest {
 
-	@BeforeAll
+	@BeforeClass
 	static void setUpBeforeClass() throws Exception {
 	}
 
-	@AfterAll
+	@AfterClass
 	static void tearDownAfterClass() throws Exception {
 	}
 
-	@BeforeEach
+	@Before
 	void setUp() throws Exception {
 	}
 
-	@AfterEach
+	@After
 	void tearDown() throws Exception {
 	}
 
@@ -35,7 +35,7 @@ class AntiSpamFilterProblemTest {
 
 	@Test
 	void testAntiSpamFilterProblemInteger() {
-		AntiSpamFilterProblem a = new AntiSpamFilterProblem(50);
+		AntiSpamFilterProblem a = new AntiSpamFilterProblem(50, );
 		assertEquals(50, a.getNumberOfVariables());
 	}
 

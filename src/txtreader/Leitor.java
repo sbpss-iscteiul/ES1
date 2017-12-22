@@ -66,8 +66,7 @@ public class Leitor {
 		try {
 			pw = new PrintWriter(new FileOutputStream(new File(source)));
 			pw.flush();
-			for(int i=0;i<100;i++) {
-//			for(int i=0;i<rules.size();i++) {
+			for(int i=0;i<rules.size();i++) {
 				pw.println(rules.get(i)+" "+weights.get(i));
 			}
 			pw.close();
@@ -113,7 +112,6 @@ public class Leitor {
 					tmp.add_Rules(tmpRule);
 				}
 			} catch (IllegalArgumentException e) {
-//				System.out.println("Regras:"+ruleName+" n�o est� contida na lista de regras");
 			}
 		}
 		if(source.contains("spam.log")) {

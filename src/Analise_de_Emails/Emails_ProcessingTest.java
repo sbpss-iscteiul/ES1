@@ -1,14 +1,14 @@
 package Analise_de_Emails;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import txtreader.Email;
 import txtreader.Rule;
@@ -18,19 +18,19 @@ class Emails_ProcessingTest {
 	private ArrayList<Email> spam;
 	private ArrayList<Double> weights;
 	
-	@BeforeAll
+	@BeforeClass
 	static void setUpBeforeClass() throws Exception {
 	}
 
-	@AfterAll
+	@AfterClass
 	static void tearDownAfterClass() throws Exception {
 	}
 
-	@BeforeEach
+	@Before
 	void setUp() throws Exception {
 	}
 
-	@AfterEach
+	@After
 	void tearDown() throws Exception {
 	}
 

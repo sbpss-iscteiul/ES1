@@ -34,6 +34,6 @@ public class Email {
 	
 	@Override
 	public String toString() {
-		return "Email name:"+emailName;
+		return "Email name:"+emailName+" - "+rules;
 	}
 }

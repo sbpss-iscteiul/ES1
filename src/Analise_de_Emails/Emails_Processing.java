@@ -46,7 +46,6 @@ public class Emails_Processing {
 			double weights_sum=0.0;
 			for(Rule r:e.getRules()) {
 				weights_sum+=weights.get(r.getId());
-				
 			}
 			if(weights_sum<5.0) {
 				FN++;

@@ -6,14 +6,22 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -25,6 +33,7 @@ import javax.swing.WindowConstants;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+
 import Analise_de_Emails.Emails_Processing;
 import txtreader.Leitor;
 
@@ -116,12 +125,39 @@ public class Interface{
 		ruleTable = new JTable(ruleModel);
 		ruleTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		ruleScroll = new JScrollPane(ruleTable);
-
-//		JTextArea manualTextArea = new JTextArea();
-//		JScrollPane manualScroll = new JScrollPane(manualTextArea);
 //		
+		DefaultListModel<String> autoListModel = new DefaultListModel<String>();
+		try{
+			Scanner scannerVar = new Scanner(new File("C:\\Users\\duart\\Desktop\\experimentBaseDirectory\\AntiSpamStudy\\data\\NSGAII\\AntiSpamFilterProblem\\VAR0.tsv"));
+			Scanner scannerFun = new Scanner(new File("C:\\Users\\duart\\Desktop\\experimentBaseDirectory\\AntiSpamStudy\\data\\NSGAII\\AntiSpamFilterProblem\\FUN0.tsv"));
+			ArrayList<String> funLinesFP = new ArrayList<String>();
+			while(scannerFun.hasNextLine()){
+				String[] tempFun = scannerFun.nextLine().split(" ");
+				funLinesFP.add(tempFun[0]);
+			}
+			scannerFun.close();
+			int minFunValue = funLinesFP.indexOf(Collections.min(funLinesFP));
+			System.out.println(minFunValue);
+			int i=0;
+			while(scannerVar.hasNextLine()){
+				if(i==minFunValue){
+					String[] tempVar = scannerVar.nextLine().split(" ");
+					for(int j=0; j<tempVar.length; j++){
+						autoListModel.addElement(tempVar[j]);
+					}
+					scannerVar.close();
+					break;
+				}
+				i++;
+			}
+			
+		}catch(FileNotFoundException e){
+			System.out.println("FICHEIRO TESTE NÃO ECNCONTRADO");
+		}
+		
+		JList autoList = new JList(autoListModel);
 		JTextArea autoTextArea = new JTextArea();
-		JScrollPane autoScroll = new JScrollPane(autoTextArea);
+		JScrollPane autoScroll = new JScrollPane(autoList);
 		
 		JButton loadButton = new JButton("Load Rules");
 		loadButton.addActionListener(new ActionListener() {			
@@ -134,18 +170,18 @@ public class Interface{
 		});
 		
 		JButton manualEvaluateButton = new JButton("Evaluate Manually");
-		JPanel subPanel = new JPanel();
-		subPanel.setLayout(new GridLayout(1,2));
-		JTextField FN = new JTextField("Falsos Negativos");
-		FN.setEnabled(false);
-		JTextField FP = new JTextField("Falsos Positivos");
-		FP.setEnabled(false);
-		subPanel.add(FN);
-		subPanel.add(FP);
+		JPanel manualSubPanel = new JPanel();
+		manualSubPanel.setLayout(new GridLayout(1,2));
+		JTextField manualFN = new JTextField("Falsos Negativos");
+		manualFN.setEnabled(false);
+		JTextField manualFP = new JTextField("Falsos Positivos");
+		manualFP.setEnabled(false);
+		manualSubPanel.add(manualFN);
+		manualSubPanel.add(manualFP);
 		JPanel manualButtonPanel = new JPanel();
 		manualButtonPanel.setLayout(new GridLayout(2,1));
 		manualButtonPanel.add(manualEvaluateButton);
-		manualButtonPanel.add(subPanel);
+		manualButtonPanel.add(manualSubPanel);
 		manualEvaluateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -156,27 +192,47 @@ public class Interface{
 					leitor.read_Email(text3.getText());
 					Emails_Processing tmp = new Emails_Processing(leitor.getSpam(), leitor.getHam(), weights);
 	//				manualTextArea.setText(tmp.avaliar());
-					FN.setText(""+tmp.calcFN());
-					FP.setText(""+tmp.calcFP());
+					manualFN.setText(""+tmp.calcFN());
+					manualFP.setText(""+tmp.calcFP());
 				}
 				
 			}		
 		});
 		
-		JButton autoEvaluateButton = new JButton("Evaluate Automatically");
 		JPanel autoButtonPanel = new JPanel();
+		JButton autoSaveButton = new JButton("Save Config");
+		JButton autoEvaluateButton = new JButton("Evaluate Automatically");
+		JPanel autoSubPanel = new JPanel();
+		autoSubPanel.setLayout(new GridLayout(1,2));
+		JTextField autoFN = new JTextField("Falsos Negativos");
+		autoFN.setEnabled(false);
+		JTextField autoFP = new JTextField("Falsos Positivos");
+		autoFP.setEnabled(false);
+		autoSubPanel.add(autoFN);
+		autoSubPanel.add(autoFP);
 		autoButtonPanel.setLayout(new FlowLayout());
 		autoButtonPanel.add(autoEvaluateButton);
+		autoButtonPanel.add(autoSaveButton);
 		autoEvaluateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 					String source1= text1.getText().replaceAll("rules.cf", "");
-					AntiSpamFilterAutomaticConfiguration.main(new String[0]);
+					AntiSpamFilterAutomaticConfiguration.main(source1);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+			}
+		});
+		autoSaveButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<Double> autoWeights = new ArrayList<Double>();
+				for(int i=0; i<autoListModel.size(); i++){
+					autoWeights.add(Double.parseDouble(autoListModel.get(i)));
+				}
+				leitor.write_Rules(text1.getText(), ruleList, autoWeights);
 			}
 		});
 		
@@ -308,6 +364,7 @@ public class Interface{
 		rightPanel.add(manualButtonPanel);
 //		rightPanel.add(manualScroll);
 		rightPanel.add(autoButtonPanel);
+		rightPanel.add(autoSubPanel);
 		rightPanel.add(autoScroll);
 		
 		//adicionar paineis esquerdo e direito ao painel central, e o central � frame

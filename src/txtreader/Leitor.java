@@ -53,7 +53,6 @@ public class Leitor {
 			}
 			sc.close();
 			firstTime=false;
-			System.out.println(firstTime);
 			ruleContent=null;
 			nRegras=contador;
 		} catch (FileNotFoundException e) {
@@ -62,12 +61,13 @@ public class Leitor {
 		
 	}
 	
-	private void write_Rules(String source, ArrayList<String> rules, ArrayList<Double> weights) {
+	public void write_Rules(String source, ArrayList<String> rules, ArrayList<Double> weights) {
 		PrintWriter pw;
 		try {
 			pw = new PrintWriter(new FileOutputStream(new File(source)));
 			pw.flush();
-			for(int i=0;i<rules.size();i++) {
+			for(int i=0;i<100;i++) {
+//			for(int i=0;i<rules.size();i++) {
 				pw.println(rules.get(i)+" "+weights.get(i));
 			}
 			pw.close();
@@ -94,14 +94,13 @@ public class Leitor {
 				contadorEmails++;
 			}
 			sc.close();
-//			System.out.println(contadorEmails);
 		} catch (FileNotFoundException e) {
 			System.out.println("Ficheiro nao foi encontrado");
 		}
 	}
 	
 	private void tratarLine(String nextLine, String source) {
-		String [] line_content=nextLine.split(" ");
+		String [] line_content=nextLine.split("	");
 		Email tmp = new Email(line_content[0]);
 		for(int i=1;i<line_content.length;i++) {
 			String ruleName=line_content[i];
@@ -109,9 +108,12 @@ public class Leitor {
 				int id = listPosition(ruleName);
 				if(id==-1)
 					throw new IllegalArgumentException();
-				tmp.add_Rules(new Rule(ruleName, id));
+				else{
+					Rule tmpRule =new Rule(ruleName, id);
+					tmp.add_Rules(tmpRule);
+				}
 			} catch (IllegalArgumentException e) {
-				//System.out.println("Regras:"+ruleName+" n�o est� contida na lista de regras");
+//				System.out.println("Regras:"+ruleName+" n�o est� contida na lista de regras");
 			}
 		}
 		if(source.contains("spam.log")) {
@@ -190,10 +192,6 @@ public class Leitor {
 
 	}
 		
-	
-	
-	
-	
 	
 	
 	

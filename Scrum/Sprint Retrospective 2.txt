@@ -1,0 +1,18 @@
+Sprint Retrospective2
+
+What did we do well?
+	Conclusão do implementaçao da interface painel centro esquerdo;
+	Avaliação dos resultados da configuração manual;
+
+What should we have done better?
+	Utilização do trello;
+	Optimizar avaliação dos resultados da configuração manual; 
+
+What should we start doing?
+	Testes Junit;
+
+What should we stop doing?
+	Implementaçao da interface;
+
+What should we keep doing?
+	 Continuação da avaliação dos resultados da configuração manual;

@@ -1,0 +1,18 @@
+Sprint Retrospective
+
+What did we do well?
+	Conclusão do planeamento;
+	Conclusão do desenho da interface;
+	Iniciação da implementaçao da interface;
+	Implementação da leitura de ficheiros;
+
+What should we have done better?
+	Utilização do trello;
+
+What should we start doing?
+	Testes Junit para a leitura de ficheiros;
+
+What should we stop doing?
+
+What should we keep doing?
+	Continuação da implementaçao da interface;

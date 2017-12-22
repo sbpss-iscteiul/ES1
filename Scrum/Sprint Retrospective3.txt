@@ -1,0 +1,19 @@
+Sprint Retrospective3
+
+What did we do well?
+	Optimização da avaliação dos resultados da configuração manual;
+	Junit Testes com cobertura superior a 75%;
+	Conclusão da Implementação do painel central direito
+	Avaliar Resultados (FP/FN) Configuração Automática;
+	
+ 
+What should we have done better?
+	Testes junit
+	Configuração automatica;
+
+What should we start doing?
+	
+What should we stop doing?
+	
+What should we keep doing?
+

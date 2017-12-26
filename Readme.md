@@ -12,8 +12,9 @@ Ruben Moreira	73272		Quality Manager
 
 Identificacao da variante do projeto desenvolvida  AntiSpamConfigurationForProfessionalMailbox
 
-Link para um video no youtube com a demonstracao da aplicacao final desenvolvida (ex: http://...)
+Link para um video no youtube com a demonstracao da aplicacao final desenvolvida
+  -https://www.youtube.com/watch?v=MK24IB40RGg&feature=youtu.be
 
 
-Jtable nao atualiza ao carregar no bot„o Save
-Devido a configuraÁ„o automatica nao funcionar 100% das vezes foi feito um while para forÁar o execuÁao correcta (repete a chamada da configuraÁ„o automatica ate que esta produza resultados)
+Jtable nao atualiza ao carregar no bot√£o Save
+Devido a configura√ß√£o automatica nao funcionar 100% das vezes foi feito um while para for√ßar o execu√ßao correcta (repete a chamada da configura√ß√£o automatica ate que esta produza resultados)
